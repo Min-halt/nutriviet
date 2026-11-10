@@ -3,7 +3,9 @@
  * Mỗi bước tương ứng một hàm trong engine, để người dùng (và giảng viên) đối chiếu được.
  */
 import {
+  BMI_THAM_CHIEU_DAM,
   BMR,
+  GIAM_CAN_TOI_DA_KG_MOI_TUAN,
   HE_SO_CONG_VIEC,
   KCAL_MOI_GAM,
   MET_NGHI,
@@ -136,8 +138,14 @@ export function giaiThichKeHoach(
   buoc.push({
     tieuDe: "6. Chất đạm (protein)",
     noiDung:
-      `${giaiThichGPerKg}. ${so(k.macro.proteinGPerKg, 1)} × ${so(hs.canNangKg, 1)} kg ≈ ${so(k.macro.proteinG)} g ` +
-      `(mỗi gam ${KCAL_MOI_GAM.protein} kcal → ${so(k.macro.proteinKcal)} kcal).`,
+      `${giaiThichGPerKg}. ${so(k.macro.proteinGPerKg, 1)} × ${so(k.canNangTinhDam, 1)} kg ≈ ${so(k.macro.proteinG)} g ` +
+      `(mỗi gam ${KCAL_MOI_GAM.protein} kcal → ${so(k.macro.proteinKcal)} kcal).` +
+      // BMI > 25: đạm tính theo cân nặng ứng với BMI 25 thay vì cân nặng thật
+      (k.canNangTinhDam < hs.canNangKg
+        ? ` Vì BMI của bạn cao hơn ${BMI_THAM_CHIEU_DAM}, mình dùng cân nặng ứng với BMI ${BMI_THAM_CHIEU_DAM} ` +
+          `(${BMI_THAM_CHIEU_DAM} × ${so(hs.chieuCaoCm / 100, 2)}² ≈ ${so(k.canNangTinhDam, 1)} kg) thay cho ${so(hs.canNangKg, 1)} kg, ` +
+          `để lượng đạm không cao quá mức cần.`
+        : ""),
   });
 
   // 7. Chất béo
@@ -221,7 +229,10 @@ export function giaiThichMucTieuCan(
       return (
         `${giam ? "Giảm" : "Tăng"} ${so(Math.abs(canMucTieuKg - canHienTaiKg), 1)} kg trong ${soTuan} tuần ` +
         `là khoảng ${so((kq.tiLeMoiTuan ?? 0) * 100, 1)}% cân nặng mỗi tuần, hơi gấp so với mức an toàn ` +
-        `(tối đa ${so(kq.tiLeToiDa * 100, 1)}%/tuần). Mình đề xuất khoảng ${kq.soTuanDeXuat} tuần ` +
+        (giam
+          ? `(tối đa ${so(kq.tiLeToiDa * 100, 1)}% cân nặng và không quá ${so(GIAM_CAN_TOI_DA_KG_MOI_TUAN)} kg mỗi tuần). `
+          : `(tối đa ${so(kq.tiLeToiDa * 100, 1)}%/tuần). `) +
+        `Mình đề xuất khoảng ${kq.soTuanDeXuat} tuần ` +
         `để cơ thể thích nghi nhẹ nhàng hơn.`
       );
   }

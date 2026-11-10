@@ -7,7 +7,12 @@ import { SO_LY_NUOC_TOI_DA } from "@/lib/config";
 import type { PhongCach, ThucDonTuan } from "@/lib/engine/menu";
 import type { MonDaAn, NhatKy, NhatKyNgay } from "@/lib/engine/tracking";
 import { timMon } from "@/lib/monAn";
-import { laHoSoHopLe, type HoSo } from "@/lib/profile";
+import {
+  draftThanhHoSo,
+  hoSoThanhDraft,
+  laHoSoHopLe,
+  type HoSo,
+} from "@/lib/profile";
 
 export const KHOA_HO_SO = "nutriviet.hoSo";
 export const KHOA_THUC_DON = "nutriviet.thucDon";
@@ -41,7 +46,8 @@ export function phanTichHoSo(raw: string | null): HoSo | null {
   if (!raw) return null;
   try {
     const x: unknown = JSON.parse(raw);
-    return laHoSoHopLe(x) ? x : null;
+    // Trả về bản đã chuẩn hóa (vd hồ sơ cũ lỡ lưu "nam + mang thai" → "không")
+    return laHoSoHopLe(x) ? draftThanhHoSo(hoSoThanhDraft(x)) : null;
   } catch {
     return null;
   }

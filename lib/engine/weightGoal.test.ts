@@ -124,3 +124,40 @@ describe("checkWeightGoal", () => {
     ).toBe("khong_hop_le");
   });
 });
+
+describe("checkWeightGoal — giảm tối đa 1 kg/tuần (góp ý của nhóm)", () => {
+  it("150 kg → 120 kg trong 20 tuần: 1,5 kg/tuần > 1 kg → đề xuất 30 tuần", () => {
+    const r = checkWeightGoal({
+      mucTieu: "giam_mo",
+      canHienTaiKg: 150,
+      canMucTieuKg: 120,
+      soTuan: 20,
+      chieuCaoCm: 175,
+    });
+    expect(r.trangThai).toBe("qua_nhanh");
+    expect(r.kgToiDaMoiTuan).toBe(1);
+    expect(r.soTuanDeXuat).toBe(30);
+  });
+  it("150 kg → 140 kg trong 10 tuần: đúng 1 kg/tuần → ok", () => {
+    expect(
+      checkWeightGoal({
+        mucTieu: "giam_mo",
+        canHienTaiKg: 150,
+        canMucTieuKg: 140,
+        soTuan: 10,
+        chieuCaoCm: 175,
+      }).trangThai,
+    ).toBe("ok");
+  });
+  it("người nhẹ cân hơn vẫn theo mức 1%: 70 kg → tối đa 0,7 kg/tuần", () => {
+    expect(
+      checkWeightGoal({
+        mucTieu: "giam_mo",
+        canHienTaiKg: 70,
+        canMucTieuKg: 62,
+        soTuan: 4,
+        chieuCaoCm: 170,
+      }).kgToiDaMoiTuan,
+    ).toBeCloseTo(0.7, 9);
+  });
+});

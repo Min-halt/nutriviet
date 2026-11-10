@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { DANH_SACH_DI_UNG } from "@/lib/config";
+import {
+  DANH_SACH_DI_UNG,
+  SO_MON_TOI_DA,
+  SO_MON_TOI_THIEU,
+} from "@/lib/config";
 import { DANH_SACH_MON } from "@/lib/monAn";
 import {
   demLyDoLoai,
@@ -23,9 +27,9 @@ const mon = (id: string) => DANH_SACH_MON.find((m) => m.id === id)!;
 describe("data/dishes.json — đúng schema SPEC mục 5", () => {
   const MA_DI_UNG: string[] = DANH_SACH_DI_UNG.map((x) => x.ma);
 
-  it("có 10–15 món, id không trùng", () => {
-    expect(DANH_SACH_MON.length).toBeGreaterThanOrEqual(10);
-    expect(DANH_SACH_MON.length).toBeLessThanOrEqual(15);
+  it("số món nằm trong giới hạn ở lib/config.ts, id không trùng", () => {
+    expect(DANH_SACH_MON.length).toBeGreaterThanOrEqual(SO_MON_TOI_THIEU);
+    expect(DANH_SACH_MON.length).toBeLessThanOrEqual(SO_MON_TOI_DA);
     expect(new Set(DANH_SACH_MON.map((m) => m.id)).size).toBe(
       DANH_SACH_MON.length,
     );
@@ -159,7 +163,7 @@ describe("lyDoLoai / locMon", () => {
       lyDoLoai(mon("pho-bo"), { ...boLocRong, monKhongThich: ["pho-bo"] }),
     ).toBe("khong_thich");
     expect(
-      lyDoLoai(mon("pho-bo"), { ...boLocRong, nganSachMoiBuaVnd: 30000 }),
+      lyDoLoai(mon("pho-bo"), { ...boLocRong, nganSachMoiBuaVnd: 25000 }),
     ).toBe("ngan_sach");
     expect(
       lyDoLoai(mon("com-ga-luoc"), { ...boLocRong, thoiGianNauToiDa: 15 }),
@@ -182,7 +186,18 @@ describe("lyDoLoai / locMon", () => {
       nganSachMoiBuaVnd: 20000,
     });
     expect(dem.ngan_sach).toBe(
-      DANH_SACH_MON.filter((m) => m.price_vnd > 20000).length,
+      DANH_SACH_MON.filter((m) => m.price_vnd > 20000 * 1.5).length,
     );
+  });
+});
+
+describe("Ngân sách là trung bình mỗi bữa (linh hoạt tới 1,5 lần)", () => {
+  it("ngân sách 30k: phở 40k vẫn được nhận (≤ 45k); ngân sách 25k: phở bị loại (> 37,5k)", () => {
+    expect(
+      lyDoLoai(mon("pho-bo"), { ...boLocRong, nganSachMoiBuaVnd: 30000 }),
+    ).toBeNull();
+    expect(
+      lyDoLoai(mon("pho-bo"), { ...boLocRong, nganSachMoiBuaVnd: 25000 }),
+    ).toBe("ngan_sach");
   });
 });

@@ -23,7 +23,12 @@ import {
   so,
 } from "@/lib/engine/explain";
 import { tinhKeHoach } from "@/lib/engine/plan";
-import { NHAN_AN_CAN_BANG, NHAN_MUC_TIEU } from "@/lib/labels";
+import {
+  LOI_BMI_CAN_BAC_SI,
+  NHAN_AN_CAN_BANG,
+  NHAN_MUC_TIEU,
+  NHAN_NHOM_BMI,
+} from "@/lib/labels";
 import { SO_BUOC_NHAP, hoSoThanhTinhToan, type HoSo } from "@/lib/profile";
 import { KHOA_THUC_DON, coThucDonDaDoi, luuHoSo } from "@/lib/storage";
 import { useHoSo, useKhoa } from "@/lib/useHoSo";
@@ -92,7 +97,12 @@ function KetQua({ hoSo }: { hoSo: HoSo }) {
         </HopGhiChu>
       )}
       {k.an_toan.canGhiChuBacSi && (
-        <HopGhiChu kieu="luu_y">{GHI_CHU_BAC_SI}</HopGhiChu>
+        <HopGhiChu kieu="luu_y">
+          {k.an_toan.bmiCanBacSi && !k.an_toan.anSoLieu && (
+            <p className="mb-1">{LOI_BMI_CAN_BAC_SI}</p>
+          )}
+          <p>{GHI_CHU_BAC_SI}</p>
+        </HopGhiChu>
       )}
 
       {/* Tầng 1: không hiển thị con số calo/macro (an toàn thắng) */}
@@ -124,6 +134,18 @@ function KetQua({ hoSo }: { hoSo: HoSo }) {
                 moTa="Tổng năng lượng mỗi ngày"
                 giaTri={k.tdee}
               />
+            </section>
+
+            {/* BMI theo chuẩn châu Á — lời nhẹ nhàng, không phán xét */}
+            <section className="rounded-2xl border border-gray-200 bg-white p-4">
+              <p className="text-xs text-gray-500">Chỉ số khối cơ thể</p>
+              <p className="text-sm font-semibold text-gray-700">BMI</p>
+              <p className="text-2xl font-bold text-gray-900">{so(k.bmi, 1)}</p>
+              <p className="mt-1 text-sm text-gray-600">
+                {NHAN_NHOM_BMI[k.nhomBMI].charAt(0).toUpperCase() +
+                  NHAN_NHOM_BMI[k.nhomBMI].slice(1)}{" "}
+                theo chuẩn châu Á (khoảng khỏe mạnh: 18,5–22,9).
+              </p>
             </section>
 
             {/* Macro — ẩn với bệnh thận (lượng đạm do bác sĩ chỉ định) */}

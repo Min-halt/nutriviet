@@ -224,3 +224,31 @@ describe("goiYDoiMon / doiMon", () => {
     expect(goiYDoiMon(t, 0, 9, DANH_SACH_MON, boLoc)).toEqual([]);
   });
 });
+
+describe("taoThucDon — ngân sách cả ngày", () => {
+  it.each([15000, 20000, 25000, 30000])(
+    "ngân sách %i đ/bữa: mọi ngày có thực đơn đều không vượt ngân sách × số bữa",
+    (gia) => {
+      const b = { ...boLoc, nganSachMoiBuaVnd: gia };
+      const x = taoThucDon({ ...tc, boLoc: b });
+      x.ngay
+        .filter((n) => n.dat)
+        .forEach((n) => {
+          expect(n.tong.gia).toBeLessThanOrEqual(gia * 3);
+          n.bua.forEach((m) => expect(m.gia).toBeLessThanOrEqual(gia * 1.5));
+        });
+    },
+  );
+
+  it("Đổi món không làm tổng tiền ngày vượt ngân sách", () => {
+    const b = { ...boLoc, nganSachMoiBuaVnd: 25000 };
+    const x = taoThucDon({ ...tc, boLoc: b });
+    const d = x.ngay.findIndex((n) => n.dat);
+    for (let i = 0; i < 3; i++) {
+      for (const g of goiYDoiMon(x, d, i, DANH_SACH_MON, b)) {
+        const moi = doiMon(x, d, i, g.mon, g.khauPhan);
+        expect(moi.ngay[d].tong.gia).toBeLessThanOrEqual(25000 * 3);
+      }
+    }
+  });
+});

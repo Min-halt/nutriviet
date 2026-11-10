@@ -82,7 +82,7 @@ lib/
   storage.ts          đọc/ghi localStorage
   profile.ts          hồ sơ người dùng, kiểm tra từng bước onboarding
   hoSoMau.ts          3 hồ sơ mẫu để demo
-data/dishes.json      database 15 món Việt mẫu (đọc bởi app)
+data/dishes.json      database 21 món Việt mẫu (đọc bởi app)
 data/mon-an.csv       cùng dữ liệu dạng bảng — nhóm sửa bằng Excel rồi chạy npm run nhap-mon
 e2e/                  test trình duyệt (Playwright)
 docs/THUYET-TRINH.md  tài liệu chuẩn bị thuyết trình
@@ -96,6 +96,8 @@ Mọi hằng số nằm ở `lib/config.ts`, nhóm chỉnh ở đó là cả app
 Hồ sơ người dùng
    │
    ▼
+body.ts ──── + phân loại BMI chuẩn châu Á, chặn số đo vô lý (BMI ngoài 12–60),
+             đạm tính theo cân nặng ứng với BMI 25 khi BMI > 25
 safety.ts ── Tầng an toàn: tầng 1 → chỉ "Ăn cân bằng", ẩn con số calo, tắt giảm bù;
              tầng 2 → lọc món theo bệnh nền
    │
@@ -115,6 +117,7 @@ plan.ts ──── Hàm tổng hợp tinhKeHoach(); explain.ts sinh lời "Vì
    │
    ▼
 dishes.ts ── Dinh dưỡng theo khẩu phần, bộ lọc món (an toàn → dị ứng → chế độ ăn → món ghét → ngân sách → thời gian nấu)
+             Ngân sách là TRUNG BÌNH mỗi bữa: từng bữa ≤ 1,5 lần, tổng ngày ≤ ngân sách × số bữa
 menu.ts ──── Thực đơn 7 ngày: chia calo theo bữa → xếp món cả tuần (bữa ít món xếp trước)
              → tối đa 2 lần/tuần → tổng ngày ±10%, không đạt thì báo "chưa đủ món" (không ép) → Đổi món
    │
@@ -157,10 +160,19 @@ Mỗi địa chỉ mạng gọi AI tối đa 20 lần / 10 phút (`lib/ai/gioiHa
 
 ---
 
+## Thay đổi so với SPEC (nhóm đã đồng ý)
+
+- **Giới tính hỏi ở bước 1** (trước câu mang thai/cho con bú); câu mang thai chỉ hỏi khi chọn Nữ.
+- **BMI:** chặn số đo vô lý; phân loại theo chuẩn châu Á; gợi ý mục tiêu theo BMI; BMI ≥ 30 có ghi chú bác sĩ theo dõi; đạm tính theo cân nặng ứng với BMI 25 khi BMI > 25.
+- **Giảm cân tối đa 1% cân nặng/tuần và không quá 1 kg/tuần.**
+- **Ngân sách là trung bình mỗi bữa** (SPEC ghi "ngân sách mỗi bữa"); tối thiểu 10.000 đ.
+- **Số món tối đa 25** (SPEC ghi 10–15); đã thêm 6 món giá rẻ, số liệu ước lượng.
+- Tầng 1 ẩn con số calo và tắt giảm bù (an toàn hơn SPEC).
+
 ## Giới hạn hiện tại
 
 - **Số liệu món là ước lượng** (`"verified": false`). Nhóm sẽ thay bằng số liệu theo Bảng thành phần thực phẩm Việt Nam — làm theo [`docs/HUONG-DAN-NHAP-SO-LIEU.md`](docs/HUONG-DAN-NHAP-SO-LIEU.md).
-- **Chỉ có 15 món mẫu** nên:
+- **Mới có 21 món mẫu** nên:
   - Người cần nhiều calo (khoảng trên 2.200 kcal/ngày) có thể thấy vài ngày "chưa đủ món phù hợp".
   - Người dị ứng nước mắm hoặc ăn chay với ngân sách thấp có ít lựa chọn.
   - Hướng xử lý: bổ sung món (kể cả món phần lớn) khi có dữ liệu đã kiểm tra.

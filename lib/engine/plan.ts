@@ -5,7 +5,13 @@
  * Thứ tự: an toàn → BMR → calo tập → TDEE → calo mục tiêu (mức sàn) → macro → kiểm tra cân mục tiêu.
  */
 import { KCAL_MOI_GAM } from "@/lib/config";
-import { calcBMI, calcBMR } from "./body";
+import {
+  calcBMI,
+  calcBMR,
+  canNangTinhDam,
+  phanLoaiBMI,
+  type NhomBMI,
+} from "./body";
 import { calcExerciseKcalPerDay, calcTargetCalories, calcTDEE } from "./energy";
 import { calcMacros } from "./macros";
 import { getSafetyTier, type SafetyInput, type SafetyResult } from "./safety";
@@ -30,6 +36,8 @@ export interface KeHoach {
   mucTieuNguoiDung: MucTieu;
   mucTieuApDung: MucTieu; // có thể khác nếu bị tầng 1 khóa
   bmi: number; // 1 chữ số thập phân
+  nhomBMI: NhomBMI; // phân loại theo chuẩn châu Á
+  canNangTinhDam: number; // cân nặng dùng để tính đạm (BMI > 25 → cân ứng với BMI 25), 1 chữ số thập phân
   bmr: number;
   caloTap: number;
   tdee: number;
@@ -74,9 +82,11 @@ export function tinhKeHoach(hs: HoSoTinhToan): KeHoach {
   //    → bấm máy tính lại các số hiển thị sẽ khớp nhau.
   const caloMucTieu = Math.round(target.kcal);
   const coChoiTheThao = hs.theThao !== null && hs.theThao.soBuoiMoiTuan > 0;
+  // BMI > 25 → tính đạm theo cân nặng ứng với BMI 25 (tránh lượng đạm quá cao)
+  const canDam = canNangTinhDam(hs.canNangKg, hs.chieuCaoCm);
   const m = calcMacros({
     kcal: caloMucTieu,
-    canNangKg: hs.canNangKg,
+    canNangKg: canDam,
     mucTieu: mucTieuApDung,
     coChoiTheThao,
     // Bệnh thận: không cộng thêm đạm dù chọn phong cách nào (an toàn thắng)
@@ -103,6 +113,8 @@ export function tinhKeHoach(hs: HoSoTinhToan): KeHoach {
     mucTieuNguoiDung: hs.mucTieu,
     mucTieuApDung,
     bmi: Math.round(calcBMI(hs.canNangKg, hs.chieuCaoCm) * 10) / 10,
+    nhomBMI: phanLoaiBMI(calcBMI(hs.canNangKg, hs.chieuCaoCm)),
+    canNangTinhDam: Math.round(canDam * 10) / 10,
     bmr: Math.round(bmr),
     caloTap: Math.round(caloTap),
     tdee: Math.round(tdee),

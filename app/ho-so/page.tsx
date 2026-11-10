@@ -97,7 +97,7 @@ function NoiDungHoSo({ h }: { h: HoSo }) {
             ? `${h.monKhongThich.length} món`
             : "Chưa chọn",
         ],
-        ["Ngân sách mỗi bữa", `${so(h.nganSachMoiBuaVnd)} đ`],
+        ["Ngân sách TB mỗi bữa", `${so(h.nganSachMoiBuaVnd)} đ`],
         ["Thời gian nấu tối đa", nhanThoiGianNau(h.thoiGianNauToiDa)],
         ["Số bữa mỗi ngày", `${h.soBua} bữa`],
         ["Thường ăn ở", NHAN_NOI_AN[h.noiAn]],

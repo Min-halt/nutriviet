@@ -124,3 +124,40 @@ describe("tinhKeHoach — các số hiển thị khớp nhau khi cộng lại", 
     }
   });
 });
+
+import { giaiThichKeHoach } from "./explain";
+
+describe("tinhKeHoach — BMI cao (góp ý của nhóm)", () => {
+  const hs = {
+    ...coBan,
+    tuoi: 30,
+    gioiTinh: "nam" as const,
+    canNangKg: 100,
+    chieuCaoCm: 170,
+    congViec: "ngoi_nhieu" as const,
+    theThao: null,
+    mucTieu: "giam_mo" as const,
+    canMucTieuKg: 90,
+    soTuan: 12,
+  };
+  it("đạm tính theo 72,25 kg (BMI 25) thay vì 100 kg: 1,6 × 72,25 ≈ 116 g (không phải 160 g)", () => {
+    const k = tinhKeHoach(hs);
+    expect(k.canNangTinhDam).toBe(72.3);
+    expect(k.macro.proteinG).toBe(116);
+    expect(k.nhomBMI).toBe("beo_phi_2");
+    expect(k.an_toan.bmiCanBacSi).toBe(true);
+    expect(k.an_toan.canGhiChuBacSi).toBe(true);
+  });
+  it("lời giải thích nói rõ vì sao dùng cân nặng ứng với BMI 25", () => {
+    const text = giaiThichKeHoach(hs, tinhKeHoach(hs))
+      .map((b) => b.noiDung)
+      .join("\n");
+    expect(text).toContain("1,6 × 72,3 kg ≈ 116 g");
+    expect(text).toContain("cân nặng ứng với BMI 25");
+  });
+  it("BMI bình thường → đạm vẫn theo cân nặng thật, không ghi chú bác sĩ", () => {
+    const k = tinhKeHoach({ ...hs, canNangKg: 65, canMucTieuKg: 62 });
+    expect(k.canNangTinhDam).toBe(65);
+    expect(k.an_toan.bmiCanBacSi).toBe(false);
+  });
+});

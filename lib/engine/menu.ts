@@ -127,6 +127,12 @@ export function diemLuaChon(
     diem -= DIEM_CHON_MON.thuongTagUuTien;
   if (tc.noiAn !== null && mon.eat_out === (tc.noiAn === "an_ngoai"))
     diem -= DIEM_CHON_MON.thuongDungNoiAn;
+  // Món đắt hơn ngân sách bữa (trong mức linh hoạt) → cộng điểm theo phần vượt, để ưu tiên món vừa túi tiền
+  const nganSach = tc.boLoc.nganSachMoiBuaVnd;
+  if (mon.price_vnd > nganSach)
+    diem +=
+      DIEM_CHON_MON.phatVuotNganSachBua *
+      ((mon.price_vnd - nganSach) / nganSach);
   return diem;
 }
 
@@ -185,8 +191,8 @@ const NGAY_RONG = (buaThieuMon: Bua | null): NgayThucDon => ({
  *   bữa nào có ÍT món phù hợp nhất thì xếp trước (thường là bữa phụ → sáng → tối/trưa).
  *   Nhờ vậy các món dùng được cho nhiều bữa (vd bánh mì: sáng hoặc phụ) không bị
  *   bữa trưa "dùng hết" trước, khiến cuối tuần thiếu món cho bữa sáng.
- * Giai đoạn B — Từng ngày: kiểm tra tổng calo ±10%. Lệch thì thử đổi khẩu phần;
- *   vẫn lệch thì thử thay từng món bằng món khác còn lượt dùng; vẫn không được → báo chưa đủ món.
+ * Giai đoạn B — Từng ngày: kiểm tra tổng calo ±10% và tổng tiền ≤ ngân sách cả ngày.
+ *   Chưa đạt thì thử đổi khẩu phần, rồi thay dần từng món; vẫn không được → báo chưa đủ món.
  */
 export function taoThucDon(tc: TuyChonThucDon): ThucDonTuan {
   const hopLe = locMon(tc.mons, tc.boLoc);
@@ -239,28 +245,42 @@ export function taoThucDon(tc: TuyChonThucDon): ThucDonTuan {
   }
 
   // ── Giai đoạn B ──
+  // Một ngày "đạt" khi: tổng calo trong ±10% VÀ tổng tiền ≤ ngân sách cả ngày (ngân sách TB mỗi bữa × số bữa)
+  const nganSachNgay = tc.boLoc.nganSachMoiBuaVnd * tc.soBua;
+  type O = { mon: Mon; khauPhan: KhauPhan; bua: Bua };
+  const tongKcal = (x: O[]) =>
+    x.reduce((s, c) => s + dinhDuongKhauPhan(c.mon, c.khauPhan).kcal, 0);
+  const tongGia = (x: O[]) => x.reduce((s, c) => s + c.mon.price_vnd, 0);
+  const datNgay = (x: O[]) =>
+    trongKhoangCho(tongKcal(x), tc.kcalMucTieu) && tongGia(x) <= nganSachNgay;
+  const chinhKhauPhan = (x: O[]) =>
+    trongKhoangCho(tongKcal(x), tc.kcalMucTieu)
+      ? x
+      : toiUuKhauPhan(x, tc.kcalMucTieu);
+  // Điểm của một ngày (càng thấp càng tốt): ngày đạt luôn tốt hơn ngày chưa đạt
+  const diemNgay = (x: O[]) => {
+    const lechKcal = Math.abs(tongKcal(x) - tc.kcalMucTieu) / tc.kcalMucTieu;
+    const vuotGia = Math.max(0, tongGia(x) - nganSachNgay) / nganSachNgay;
+    return datNgay(x) ? lechKcal - 10 : lechKcal + 2 * vuotGia;
+  };
+
   const ngay: NgayThucDon[] = chon.map((hang) => {
     const viTriThieu = hang.findIndex((c) => c === null);
     if (viTriThieu >= 0) return NGAY_RONG(caloBua[viTriThieu].bua);
 
-    let ds = hang.map((c, i) => ({
-      mon: c!.mon,
-      khauPhan: c!.khauPhan,
-      bua: caloBua[i].bua,
-    }));
-    const tongCua = (x: typeof ds) =>
-      x.reduce((s, c) => s + dinhDuongKhauPhan(c.mon, c.khauPhan).kcal, 0);
-    if (!trongKhoangCho(tongCua(ds), tc.kcalMucTieu))
-      ds = toiUuKhauPhan(ds, tc.kcalMucTieu);
+    let ds: O[] = chinhKhauPhan(
+      hang.map((c, i) => ({
+        mon: c!.mon,
+        khauPhan: c!.khauPhan,
+        bua: caloBua[i].bua,
+      })),
+    );
 
-    // Vẫn lệch → thử thay TỪNG món bằng món khác còn lượt dùng (giữ luật 2 lần/tuần)
-    if (!trongKhoangCho(tongCua(ds), tc.kcalMucTieu)) {
-      let totNhat: {
-        ds: typeof ds;
-        lech: number;
-        cu: string;
-        moi: string;
-      } | null = null;
+    // Chưa đạt (lệch calo hoặc vượt ngân sách ngày) → thay dần từng món bằng món khác
+    // còn lượt dùng (giữ luật 2 lần/tuần, không trùng trong ngày), mỗi lần chọn cách thay tốt nhất
+    for (let lan = 0; lan < ds.length && !datNgay(ds); lan++) {
+      let totNhat: { ds: O[]; diem: number; cu: string; moi: string } | null =
+        null;
       for (let i = 0; i < ds.length; i++) {
         const cungNgay = ds.filter((_, j) => j !== i).map((c) => c.mon.id);
         for (const mon of hopLe) {
@@ -271,34 +291,28 @@ export function taoThucDon(tc: TuyChonThucDon): ThucDonTuan {
           )
             continue;
           if ((daDung.get(mon.id) ?? 0) >= SO_LAN_TOI_DA_MOI_TUAN) continue;
-          const thu = toiUuKhauPhan(
+          const thu = chinhKhauPhan(
             ds.map((c, j) => (j === i ? { ...c, mon } : c)),
-            tc.kcalMucTieu,
           );
-          const lech = Math.abs(tongCua(thu) - tc.kcalMucTieu);
-          if (
-            trongKhoangCho(tongCua(thu), tc.kcalMucTieu) &&
-            (!totNhat || lech < totNhat.lech)
-          )
-            totNhat = { ds: thu, lech, cu: ds[i].mon.id, moi: mon.id };
+          const diem = diemNgay(thu);
+          if (!totNhat || diem < totNhat.diem)
+            totNhat = { ds: thu, diem, cu: ds[i].mon.id, moi: mon.id };
         }
       }
-      if (totNhat) {
-        // Cập nhật lượt dùng: trả lượt món cũ, tính lượt món mới
-        daDung.set(totNhat.cu, (daDung.get(totNhat.cu) ?? 1) - 1);
-        daDung.set(totNhat.moi, (daDung.get(totNhat.moi) ?? 0) + 1);
-        ds = totNhat.ds;
-      }
+      if (!totNhat || totNhat.diem >= diemNgay(ds)) break; // không còn cách thay nào tốt hơn
+      // Cập nhật lượt dùng: trả lượt món cũ, tính lượt món mới
+      daDung.set(totNhat.cu, (daDung.get(totNhat.cu) ?? 1) - 1);
+      daDung.set(totNhat.moi, (daDung.get(totNhat.moi) ?? 0) + 1);
+      ds = totNhat.ds;
     }
 
-    const bua = ds.map((c) => taoMonDaChon(c.mon, c.bua, c.khauPhan));
-    const tong = tinhTongNgay(bua);
-    // Không ép: lệch quá 10% thì ngày này báo "chưa đủ món phù hợp"
-    if (!trongKhoangCho(tong.kcal, tc.kcalMucTieu)) {
-      for (const c of ds) daDung.set(c.mon.id, (daDung.get(c.mon.id) ?? 1) - 1); // trả lượt cho ngày sau
+    // Không ép: vẫn chưa đạt thì ngày này báo "chưa đủ món phù hợp" và trả lượt cho ngày sau
+    if (!datNgay(ds)) {
+      for (const c of ds) daDung.set(c.mon.id, (daDung.get(c.mon.id) ?? 1) - 1);
       return NGAY_RONG(null);
     }
-    return { bua, tong, dat: true, buaThieuMon: null };
+    const bua = ds.map((c) => taoMonDaChon(c.mon, c.bua, c.khauPhan));
+    return { bua, tong: tinhTongNgay(bua), dat: true, buaThieuMon: null };
   });
 
   return {
@@ -348,12 +362,17 @@ export function goiYDoiMon(
     .filter((_, j) => j !== buaIdx)
     .map((b) => b.monId);
 
+  // Đổi xong, tổng tiền cả ngày vẫn không vượt ngân sách ngày (ngân sách TB mỗi bữa × số bữa)
+  const giaNgayConLai = thucDon.ngay[ngayIdx].tong.gia - hienTai.gia;
+  const nganSachNgay = boLoc.nganSachMoiBuaVnd * thucDon.soBua;
+
   const ungVien = locMon(mons, boLoc).filter(
     (m) =>
       m.meal.includes(hienTai.bua) &&
       m.id !== hienTai.monId &&
       (daDung.get(m.id) ?? 0) < SO_LAN_TOI_DA_MOI_TUAN &&
-      !cungNgay.includes(m.id),
+      !cungNgay.includes(m.id) &&
+      giaNgayConLai + m.price_vnd <= nganSachNgay,
   );
 
   return ungVien
@@ -470,6 +489,7 @@ export function dungThucDonTuLuaChon(
     const bua = ds.map((c) => taoMonDaChon(c.mon, c.bua, c.khauPhan));
     const tong = tinhTongNgay(bua);
     if (!trongKhoangCho(tong.kcal, tc.kcalMucTieu)) return null; // không đạt ±10%
+    if (tong.gia > tc.boLoc.nganSachMoiBuaVnd * tc.soBua) return null; // vượt ngân sách cả ngày
     ngay.push({ bua, tong, dat: true, buaThieuMon: null });
   }
 

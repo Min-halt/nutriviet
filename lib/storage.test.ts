@@ -189,3 +189,16 @@ describe("storage — xóa toàn bộ dữ liệu", () => {
     expect(docHoSo(kho)).toBeNull();
   });
 });
+
+describe("storage — hồ sơ cũ 'nam + mang thai'", () => {
+  it("đọc ra đã được chuẩn hóa thành 'không'", () => {
+    const kho = taoKhoGia();
+    const h = {
+      ...draftThanhHoSo(draft)!,
+      gioiTinh: "nam" as const,
+      mangThaiChoConBu: true,
+    };
+    kho.setItem(KHOA_HO_SO, JSON.stringify(h));
+    expect(docHoSo(kho)!.mangThaiChoConBu).toBe(false);
+  });
+});

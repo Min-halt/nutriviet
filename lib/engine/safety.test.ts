@@ -160,3 +160,25 @@ describe("getSafetyTier — ẩn số liệu & tắt giảm bù cho tầng 1", (
     expect(getSafetyTier(binhThuong).tatGiamBu).toBe(false);
   });
 });
+
+import { mucTieuGoiY } from "./safety";
+
+describe("mucTieuGoiY — gợi ý mục tiêu theo BMI", () => {
+  const tatCa = ["giam_mo", "tang_co", "duy_tri", "an_lanh_manh"] as const;
+  it("BMI 22,5 → Duy trì, Ăn lành mạnh", () =>
+    expect(mucTieuGoiY(65, 170, [...tatCa])).toEqual([
+      "duy_tri",
+      "an_lanh_manh",
+    ]));
+  it("BMI 25,9 → Giảm mỡ", () =>
+    expect(mucTieuGoiY(75, 170, [...tatCa])).toEqual(["giam_mo"]));
+  it("BMI 17,3 → Ăn lành mạnh, Tăng cơ", () =>
+    expect(mucTieuGoiY(50, 170, [...tatCa])).toEqual([
+      "an_lanh_manh",
+      "tang_co",
+    ]));
+  it("chỉ gợi ý trong số mục tiêu được phép; số đo vô lý → không gợi ý", () => {
+    expect(mucTieuGoiY(75, 170, ["an_lanh_manh"])).toEqual([]);
+    expect(mucTieuGoiY(220, 120, [...tatCa])).toEqual([]);
+  });
+});

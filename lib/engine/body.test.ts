@@ -38,3 +38,31 @@ describe("calcBMI", () => {
     expect(() => calcBMI(50, 0)).toThrow(RangeError);
   });
 });
+
+import { bmiHopLy, canNangTinhDam, phanLoaiBMI } from "./body";
+
+describe("BMI — chuẩn châu Á", () => {
+  it.each([
+    [18.4, "thieu_can"],
+    [18.5, "binh_thuong"],
+    [22.9, "binh_thuong"],
+    [23, "thua_can"],
+    [24.9, "thua_can"],
+    [25, "beo_phi_1"],
+    [29.9, "beo_phi_1"],
+    [30, "beo_phi_2"],
+  ] as const)("BMI %s → %s", (bmi, nhom) =>
+    expect(phanLoaiBMI(bmi)).toBe(nhom),
+  );
+
+  it("bmiHopLy: 120 cm/220 kg (153) không hợp lý; 170 cm/65 kg hợp lý", () => {
+    expect(bmiHopLy(220, 120)).toBe(false);
+    expect(bmiHopLy(65, 170)).toBe(true);
+    expect(bmiHopLy(0, 170)).toBe(false);
+  });
+
+  it("canNangTinhDam: BMI ≤ 25 → cân thật; 170 cm/100 kg → 25 × 1,7² = 72,25 kg", () => {
+    expect(canNangTinhDam(65, 170)).toBe(65);
+    expect(canNangTinhDam(100, 170)).toBeCloseTo(72.25, 6);
+  });
+});

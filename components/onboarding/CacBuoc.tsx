@@ -13,7 +13,10 @@ import {
   LOI_KHUYEN_CHUYEN_GIA,
   giaiThichMucTieuCan,
   giaiThichTang1,
+  so,
 } from "@/lib/engine/explain";
+import { bmiHopLy, calcBMI, phanLoaiBMI } from "@/lib/engine/body";
+import { mucTieuGoiY } from "@/lib/engine/safety";
 import type { BenhNen, MucTieu } from "@/lib/engine/types";
 import {
   NHAN_AN_CAN_BANG,
@@ -22,6 +25,8 @@ import {
   NHAN_CONG_VIEC,
   NHAN_CUONG_DO,
   NHAN_GIOI_TINH,
+  LOI_BMI_CAN_BAC_SI,
+  NHAN_NHOM_BMI,
   NHAN_MUC_TIEU,
   NHAN_NOI_AN,
   NHAN_VAN_DE_AN_UONG,
@@ -79,6 +84,29 @@ export function Buoc1({ d, sua, loi }: PropsBuoc) {
         moTa="Giúp mình gợi ý phù hợp và an toàn hơn cho bạn. Thông tin chỉ lưu trên máy của bạn."
       />
       <div>
+        <NhanO>Giới tính sinh học</NhanO>
+        <ChonMot
+          cot={2}
+          tuyChon={[
+            { giaTri: "nam" as const, nhan: NHAN_GIOI_TINH.nam },
+            { giaTri: "nu" as const, nhan: NHAN_GIOI_TINH.nu },
+          ]}
+          giaTri={d.gioiTinh}
+          onChon={(v) =>
+            // Chọn Nam → câu mang thai không áp dụng, tự ghi "không"
+            sua(
+              v === "nam"
+                ? { gioiTinh: v, mangThaiChoConBu: false }
+                : { gioiTinh: v },
+            )
+          }
+        />
+        <p className="mt-1 text-xs text-gray-500">
+          Công thức tính năng lượng khác nhau giữa nam và nữ.
+        </p>
+        <LoiNhac>{loi.gioiTinh}</LoiNhac>
+      </div>
+      <div>
         <NhanO htmlFor="tuoi">Bạn bao nhiêu tuổi?</NhanO>
         <ONhapSo
           id="tuoi"
@@ -89,16 +117,19 @@ export function Buoc1({ d, sua, loi }: PropsBuoc) {
         />
         <LoiNhac>{loi.tuoi}</LoiNhac>
       </div>
-      <div>
-        <NhanO>Bạn đang mang thai hoặc cho con bú?</NhanO>
-        <ChonMot
-          cot={2}
-          tuyChon={CO_KHONG}
-          giaTri={d.mangThaiChoConBu}
-          onChon={(v) => sua({ mangThaiChoConBu: v })}
-        />
-        <LoiNhac>{loi.mangThaiChoConBu}</LoiNhac>
-      </div>
+      {/* Chỉ hỏi khi chọn Nữ */}
+      {d.gioiTinh === "nu" && (
+        <div>
+          <NhanO>Bạn đang mang thai hoặc cho con bú?</NhanO>
+          <ChonMot
+            cot={2}
+            tuyChon={CO_KHONG}
+            giaTri={d.mangThaiChoConBu}
+            onChon={(v) => sua({ mangThaiChoConBu: v })}
+          />
+          <LoiNhac>{loi.mangThaiChoConBu}</LoiNhac>
+        </div>
+      )}
       <div>
         <NhanO>Bạn có bệnh nền nào không? (chọn nhiều)</NhanO>
         <ChonNhieu
@@ -147,22 +178,6 @@ export function Buoc2({ d, sua, loi }: PropsBuoc) {
         tieuDe="Về cơ thể của bạn"
         moTa="Dùng để tính năng lượng cơ thể cần mỗi ngày."
       />
-      <div>
-        <NhanO>Giới tính sinh học</NhanO>
-        <ChonMot
-          cot={2}
-          tuyChon={[
-            { giaTri: "nam" as const, nhan: NHAN_GIOI_TINH.nam },
-            { giaTri: "nu" as const, nhan: NHAN_GIOI_TINH.nu },
-          ]}
-          giaTri={d.gioiTinh}
-          onChon={(v) => sua({ gioiTinh: v })}
-        />
-        <p className="mt-1 text-xs text-gray-500">
-          Công thức tính năng lượng khác nhau giữa nam và nữ.
-        </p>
-        <LoiNhac>{loi.gioiTinh}</LoiNhac>
-      </div>
       <div>
         <NhanO htmlFor="cao">Chiều cao</NhanO>
         <ONhapSo
@@ -312,6 +327,12 @@ export function Buoc4({ d, sua, loi }: PropsBuoc) {
   const biKhoa = anToan.tang1; // tầng 1: chỉ còn "Ăn cân bằng"
   const anGiamMo = !biKhoa && !choPhep.includes("giam_mo"); // BMI thấp
 
+  // BMI hiện tại + mục tiêu gợi ý (chỉ gợi ý, người dùng vẫn tự chọn)
+  const can = docSo(d.canNangKg);
+  const cao = docSo(d.chieuCaoCm);
+  const bmi = bmiHopLy(can, cao) ? calcBMI(can, cao) : null;
+  const goiY = biKhoa ? [] : mucTieuGoiY(can, cao, choPhep);
+
   const canNhapCan = d.mucTieu === "giam_mo" || d.mucTieu === "tang_co";
   const kq = canNhapCan ? kiemTraCanTuDraft(d) : null;
   const loiMucTieuCan =
@@ -340,12 +361,24 @@ export function Buoc4({ d, sua, loi }: PropsBuoc) {
       )}
       {anGiamMo && <HopGhiChu>{LOI_BMI_THAP_AN_GIAM_MO}</HopGhiChu>}
 
+      {bmi !== null && !biKhoa && (
+        <p className="-mt-2 text-sm text-gray-600">
+          Chỉ số BMI của bạn khoảng <strong>{so(bmi, 1)}</strong> —{" "}
+          {NHAN_NHOM_BMI[phanLoaiBMI(bmi)]} theo chuẩn châu Á (18,5–22,9).
+        </p>
+      )}
+      {anToan.bmiCanBacSi && !biKhoa && (
+        <HopGhiChu kieu="luu_y">{LOI_BMI_CAN_BAC_SI}</HopGhiChu>
+      )}
+
       <div>
         <ChonMot
           tuyChon={choPhep.map((m) => ({
             giaTri: m,
             nhan: biKhoa ? NHAN_AN_CAN_BANG : NHAN_MUC_TIEU[m],
-            moTa: MO_TA_MUC_TIEU[m],
+            moTa: goiY.includes(m)
+              ? `✓ Gợi ý cho bạn · ${MO_TA_MUC_TIEU[m]}`
+              : MO_TA_MUC_TIEU[m],
           }))}
           giaTri={d.mucTieu}
           onChon={(v) => sua({ mucTieu: v })}
@@ -424,7 +457,7 @@ export function Buoc5({ d, sua, loi }: PropsBuoc) {
         />
       </div>
       <div>
-        <NhanO htmlFor="tien">Ngân sách mỗi bữa</NhanO>
+        <NhanO htmlFor="tien">Ngân sách trung bình mỗi bữa</NhanO>
         <ONhapSo
           id="tien"
           giaTri={d.nganSachMoiBuaVnd}
@@ -433,7 +466,8 @@ export function Buoc5({ d, sua, loi }: PropsBuoc) {
         />
         <p className="mt-1 text-xs text-gray-500">
           Từ {G.min.toLocaleString("vi-VN")} đến {G.max.toLocaleString("vi-VN")}{" "}
-          đồng
+          đồng. Có bữa rẻ hơn, có bữa đắt hơn một chút, miễn tổng cả ngày không
+          vượt ngân sách.
         </p>
         <LoiNhac>{loi.nganSachMoiBuaVnd}</LoiNhac>
       </div>

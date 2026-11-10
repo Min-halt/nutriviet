@@ -2,6 +2,7 @@
  * Món ăn: kiểu dữ liệu, dinh dưỡng theo khẩu phần, và bộ lọc món (SPEC mục 4, 5, 6).
  * Số liệu dinh dưỡng LẤY TỪ data/dishes.json — engine chỉ nhân với hệ số khẩu phần.
  */
+import { HE_SO_NGAN_SACH_LINH_HOAT } from "@/lib/config";
 
 export type Bua = "sang" | "trua" | "toi" | "phu";
 export type KhauPhan = "it" | "vua" | "nhieu";
@@ -80,7 +81,9 @@ export function lyDoLoai(mon: Mon, b: BoLoc): LyDoLoai | null {
   )
     return "che_do_an";
   if (b.monKhongThich.includes(mon.id)) return "khong_thich";
-  if (mon.price_vnd > b.nganSachMoiBuaVnd) return "ngan_sach";
+  // Ngân sách là TRUNG BÌNH mỗi bữa: một bữa được linh hoạt tới 1,5 lần (tổng ngày kiểm tra ở menu.ts)
+  if (mon.price_vnd > b.nganSachMoiBuaVnd * HE_SO_NGAN_SACH_LINH_HOAT)
+    return "ngan_sach";
   if (mon.cook_minutes > b.thoiGianNauToiDa) return "thoi_gian_nau";
   return null;
 }

@@ -48,10 +48,10 @@ describe("kiemTraBuoc", () => {
     for (let b = 1; b <= 5; b++) expect(kiemTraBuoc(b, draftDu)).toEqual({});
   });
 
-  it("bước 1 — bản nháp trống báo đủ 4 lỗi", () => {
+  it("bước 1 — bản nháp trống báo đủ 4 lỗi (giới tính hỏi trước, câu mang thai chưa hiện)", () => {
     expect(Object.keys(kiemTraBuoc(1, DRAFT_TRONG)).sort()).toEqual([
       "benhNen",
-      "mangThaiChoConBu",
+      "gioiTinh",
       "tuoi",
       "vanDeAnUong",
     ]);
@@ -161,5 +161,73 @@ describe("laHoSoHopLe", () => {
     expect(laHoSoHopLe(null)).toBe(false);
     expect(laHoSoHopLe({ phienBan: 1 })).toBe(false);
     expect(laHoSoHopLe({ ...draftThanhHoSo(draftDu)!, tuoi: -3 })).toBe(false);
+  });
+});
+
+describe("Giới tính & câu mang thai (góp ý của nhóm)", () => {
+  it("Nam: không cần trả lời câu mang thai; hồ sơ luôn ghi 'không'", () => {
+    const d = { ...draftDu, gioiTinh: "nam" as const, mangThaiChoConBu: null };
+    expect(kiemTraBuoc(1, d)).toEqual({});
+    expect(draftThanhHoSo(d)!.mangThaiChoConBu).toBe(false);
+  });
+  it("Nữ: bắt buộc trả lời câu mang thai", () => {
+    expect(
+      kiemTraBuoc(1, { ...draftDu, gioiTinh: "nu", mangThaiChoConBu: null })
+        .mangThaiChoConBu,
+    ).toBeDefined();
+  });
+  it("hồ sơ cũ lỡ lưu 'nam + mang thai' → được sửa thành 'không'", () => {
+    const h = {
+      ...draftThanhHoSo(draftDu)!,
+      gioiTinh: "nam" as const,
+      mangThaiChoConBu: true,
+    };
+    expect(draftThanhHoSo(hoSoThanhDraft(h))!.mangThaiChoConBu).toBe(false);
+  });
+});
+
+describe("Số đo vô lý (góp ý của nhóm)", () => {
+  it("120 cm / 220 kg (BMI ≈ 153) → báo kiểm tra lại, chưa cho đi tiếp", () => {
+    const loi = kiemTraBuoc(2, {
+      ...draftDu,
+      chieuCaoCm: "120",
+      canNangKg: "220",
+    });
+    expect(loi.canNangKg).toContain("chưa khớp (BMI ≈ 153)");
+  });
+  it("200 cm / 40 kg (BMI 10) → cũng báo", () => {
+    expect(
+      kiemTraBuoc(2, { ...draftDu, chieuCaoCm: "200", canNangKg: "40" })
+        .canNangKg,
+    ).toBeDefined();
+  });
+  it("170 cm / 140 kg (BMI 48,4 — cao nhưng có thật) → vẫn nhận", () => {
+    expect(
+      kiemTraBuoc(2, { ...draftDu, chieuCaoCm: "170", canNangKg: "140" }),
+    ).toEqual({});
+  });
+  it("cân mục tiêu làm BMI > 60 → báo", () => {
+    const d = {
+      ...draftDu,
+      chieuCaoCm: "150",
+      canNangKg: "120",
+      mucTieu: "tang_co" as const,
+      canMucTieuKg: "140",
+      soTuan: "100",
+    };
+    expect(kiemTraBuoc(4, d).canMucTieuKg).toContain("chưa khớp với chiều cao");
+  });
+});
+
+describe("Ngân sách dưới 10.000 đ", () => {
+  it("báo rõ lý do (không đủ món đủ chất), không chỉ báo 'sai'", () => {
+    expect(
+      kiemTraBuoc(5, { ...draftDu, nganSachMoiBuaVnd: "8000" })
+        .nganSachMoiBuaVnd,
+    ).toContain("chưa tìm được món đủ chất");
+    expect(
+      kiemTraBuoc(5, { ...draftDu, nganSachMoiBuaVnd: "10000" })
+        .nganSachMoiBuaVnd,
+    ).toBeUndefined();
   });
 });

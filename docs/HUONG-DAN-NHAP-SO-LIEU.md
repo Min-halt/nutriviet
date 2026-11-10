@@ -54,7 +54,7 @@ Dành cho nhóm khi thay số liệu ước lượng bằng số liệu đã ki�
 - **An toàn dị ứng:** nguyên liệu có "nước mắm", "mắm tôm / mắm ruốc", "đậu phộng / lạc rang" thì cột `di_ung` bắt buộc phải có mã tương ứng.
 - Mã dị ứng, chế độ ăn, nhãn đều phải nằm trong danh sách cho phép.
 - Món `verified` = `true` phải có nguồn số liệu.
-- Số món nằm trong giới hạn SPEC (10–15 món; đổi ở `lib/config.ts` nếu nhóm đã thống nhất).
+- Số món nằm trong giới hạn ở `lib/config.ts` (hiện 10–25 món; nhóm đã đồng ý nới từ 15 món của SPEC).
 
 Excel lưu CSV kiểu tiếng Việt (dấu `;`, số thập phân `0,7`) cũng đọc được.
 

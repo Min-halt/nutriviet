@@ -6,11 +6,13 @@
  * - "HoSo" (hồ sơ): dữ liệu đã kiểm tra, lưu vào localStorage.
  */
 import {
+  BMI_HOP_LY,
   DANH_SACH_DI_UNG,
   GIOI_HAN_NHAP,
   NGAN_SACH_MAC_DINH_VND,
   THOI_GIAN_NAU_LUA_CHON,
 } from "@/lib/config";
+import { bmiHopLy, calcBMI } from "@/lib/engine/body";
 import { getSafetyTier, type SafetyResult } from "@/lib/engine/safety";
 import type { HoSoTinhToan } from "@/lib/engine/plan";
 import type {
@@ -197,20 +199,29 @@ export function kiemTraBuoc(buoc: number, d: Draft): LoiBuoc {
   const G = GIOI_HAN_NHAP;
 
   if (buoc === 1) {
+    // Giới tính hỏi ĐẦU TIÊN: câu mang thai / cho con bú chỉ hỏi khi chọn Nữ
+    if (d.gioiTinh === null) loi.gioiTinh = NHAC_CHON;
     if (!trongKhoang(docSo(d.tuoi), G.tuoi))
       loi.tuoi = `${NHAC_KIEM_TRA} (từ ${G.tuoi.min} đến ${G.tuoi.max} tuổi)`;
-    if (d.mangThaiChoConBu === null) loi.mangThaiChoConBu = NHAC_CHON;
+    if (d.gioiTinh === "nu" && d.mangThaiChoConBu === null)
+      loi.mangThaiChoConBu = NHAC_CHON;
     if (!d.khongCoBenh && d.benhNen.length === 0)
       loi.benhNen = 'Bạn chọn bệnh nền, hoặc chọn "Không có" nhé';
     if (d.vanDeAnUong === null) loi.vanDeAnUong = NHAC_CHON;
   }
 
   if (buoc === 2) {
-    if (d.gioiTinh === null) loi.gioiTinh = NHAC_CHON;
     if (!trongKhoang(docSo(d.chieuCaoCm), G.chieuCaoCm))
       loi.chieuCaoCm = `${NHAC_KIEM_TRA} (từ ${G.chieuCaoCm.min} đến ${G.chieuCaoCm.max} cm)`;
     if (!trongKhoang(docSo(d.canNangKg), G.canNangKg))
       loi.canNangKg = `${NHAC_KIEM_TRA} (từ ${G.canNangKg.min} đến ${G.canNangKg.max} kg)`;
+    // Từng số hợp lệ nhưng ghép lại vô lý (vd 120 cm / 220 kg → BMI 153) → gần như chắc chắn gõ nhầm
+    if (
+      !loi.chieuCaoCm &&
+      !loi.canNangKg &&
+      !bmiHopLy(docSo(d.canNangKg), docSo(d.chieuCaoCm))
+    )
+      loi.canNangKg = `Chiều cao và cân nặng này có vẻ chưa khớp (BMI ≈ ${Math.round(calcBMI(docSo(d.canNangKg), docSo(d.chieuCaoCm)))}). ${NHAC_KIEM_TRA}`;
   }
 
   if (buoc === 3) {
@@ -236,6 +247,14 @@ export function kiemTraBuoc(buoc: number, d: Draft): LoiBuoc {
         loi.canMucTieuKg = `${NHAC_KIEM_TRA} (từ ${G.canNangKg.min} đến ${G.canNangKg.max} kg)`;
       if (!trongKhoang(docSo(d.soTuan), G.soTuan))
         loi.soTuan = `${NHAC_KIEM_TRA} (từ ${G.soTuan.min} đến ${G.soTuan.max} tuần)`;
+      // Cân mục tiêu ghép với chiều cao phải hợp lý (BMI không quá 60)
+      const cao = docSo(d.chieuCaoCm);
+      if (
+        !loi.canMucTieuKg &&
+        cao > 0 &&
+        calcBMI(docSo(d.canMucTieuKg), cao) > BMI_HOP_LY.max
+      )
+        loi.canMucTieuKg = `Cân mục tiêu này có vẻ chưa khớp với chiều cao. ${NHAC_KIEM_TRA}`;
       if (!loi.canMucTieuKg && !loi.soTuan) {
         // Luật cân mục tiêu: BMI thấp hoặc ngược chiều thì chưa nhận.
         // "Quá nhanh" vẫn cho đi tiếp — trang Kết quả sẽ đề xuất thời hạn mới.
@@ -250,7 +269,11 @@ export function kiemTraBuoc(buoc: number, d: Draft): LoiBuoc {
     const maHopLe: string[] = DANH_SACH_DI_UNG.map((x) => x.ma);
     if (d.diUng.some((x) => !maHopLe.includes(x))) loi.diUng = NHAC_KIEM_TRA;
     if (d.cheDoAn === null) loi.cheDoAn = NHAC_CHON;
-    if (!trongKhoang(docSo(d.nganSachMoiBuaVnd, true), G.nganSachMoiBuaVnd))
+    const nganSach = docSo(d.nganSachMoiBuaVnd, true);
+    if (nganSach < G.nganSachMoiBuaVnd.min)
+      // Dưới 10.000 đ: không đủ cho một bữa đủ chất → nói rõ lý do thay vì chỉ báo "sai"
+      loi.nganSachMoiBuaVnd = `Với dưới ${G.nganSachMoiBuaVnd.min.toLocaleString("vi-VN")} đ mỗi bữa, mình chưa tìm được món đủ chất cho bạn. Bạn chọn từ ${G.nganSachMoiBuaVnd.min.toLocaleString("vi-VN")} đ trở lên nhé.`;
+    else if (!trongKhoang(nganSach, G.nganSachMoiBuaVnd))
       loi.nganSachMoiBuaVnd = `${NHAC_KIEM_TRA} (từ 10.000 đến 500.000 đ)`;
     if (
       d.thoiGianNauToiDa === null ||
@@ -281,7 +304,8 @@ export function draftThanhHoSo(d: Draft): HoSo | null {
   return {
     phienBan: PHIEN_BAN_HO_SO,
     tuoi: docSo(d.tuoi),
-    mangThaiChoConBu: d.mangThaiChoConBu!,
+    // Nam → luôn "không" (câu này không được hỏi)
+    mangThaiChoConBu: d.gioiTinh === "nu" ? d.mangThaiChoConBu! : false,
     benhNen: d.khongCoBenh ? [] : [...d.benhNen],
     vanDeAnUong: d.vanDeAnUong!,
     gioiTinh: d.gioiTinh!,
@@ -314,7 +338,7 @@ export function draftThanhHoSo(d: Draft): HoSo | null {
 export function hoSoThanhDraft(h: HoSo): Draft {
   return {
     tuoi: String(h.tuoi),
-    mangThaiChoConBu: h.mangThaiChoConBu,
+    mangThaiChoConBu: h.gioiTinh === "nu" ? h.mangThaiChoConBu : false,
     benhNen: [...h.benhNen],
     khongCoBenh: h.benhNen.length === 0,
     vanDeAnUong: h.vanDeAnUong,

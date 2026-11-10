@@ -5,8 +5,14 @@
  * Tầng 2: vẫn dùng được nhưng lọc món theo bệnh nền + luôn hiện ghi chú bác sĩ.
  * (Tầng 3 — dị ứng, chay, ngân sách... — là bộ lọc món, sẽ làm ở Giai đoạn 3.)
  */
-import { BMI_TOI_THIEU, LOC_THEO_BENH, TUOI_TOI_THIEU } from "@/lib/config";
-import { calcBMI } from "./body";
+import {
+  BMI_CAN_BAC_SI,
+  BMI_TOI_THIEU,
+  GOI_Y_MUC_TIEU_THEO_BMI,
+  LOC_THEO_BENH,
+  TUOI_TOI_THIEU,
+} from "@/lib/config";
+import { bmiHopLy, calcBMI, phanLoaiBMI } from "./body";
 import type { BenhNen, MucTieu, TraLoiVanDeAnUong } from "./types";
 
 export type LyDoTang1 =
@@ -46,6 +52,8 @@ export interface SafetyResult {
   anSoLieu: boolean;
   /** Tầng 1 → TẮT giảm bù sau "Lỡ ăn rồi" (không bao giờ siết calo với nhóm này) */
   tatGiamBu: boolean;
+  /** BMI ≥ 30 → nhắc: giảm cân an toàn nhất là khi có bác sĩ theo dõi (KHÔNG khóa chức năng) */
+  bmiCanBacSi: boolean;
 }
 
 const TAT_CA_MUC_TIEU: MucTieu[] = [
@@ -79,6 +87,13 @@ export function getSafetyTier(
     calcBMI(input.canNangKg, input.chieuCaoCm) < BMI_TOI_THIEU;
   if (bmiThap && mucTieu === "giam_mo") lyDo.push("bmi_thap_giam_mo");
 
+  const bmiCanBacSi =
+    input.canNangKg !== undefined &&
+    input.chieuCaoCm !== undefined &&
+    input.canNangKg > 0 &&
+    input.chieuCaoCm > 0 &&
+    calcBMI(input.canNangKg, input.chieuCaoCm) >= BMI_CAN_BAC_SI;
+
   const tang1 = lyDo.length > 0;
 
   // Mục tiêu được chọn:
@@ -107,13 +122,27 @@ export function getSafetyTier(
     tagLoai,
     tagUuTien,
     // Có bệnh nền (kể cả bệnh thận ở tầng 1) → luôn hiện ghi chú bác sĩ
-    canGhiChuBacSi: tang2 || input.benhNen.length > 0,
+    canGhiChuBacSi: tang2 || input.benhNen.length > 0 || bmiCanBacSi,
     anGoiYMacro: input.benhNen.includes("benh_than"),
     anSoLieu: tang1,
     tatGiamBu: tang1,
+    bmiCanBacSi,
   };
 }
 
 function unique(arr: string[]): string[] {
   return [...new Set(arr)];
+}
+
+/** Mục tiêu GỢI Ý theo BMI (bước 4 hiện nhãn "Gợi ý cho bạn"); chỉ gợi ý trong số mục tiêu được phép. */
+export function mucTieuGoiY(
+  canNangKg: number,
+  chieuCaoCm: number,
+  duocChon: MucTieu[],
+): MucTieu[] {
+  if (!bmiHopLy(canNangKg, chieuCaoCm)) return [];
+  const nhom = phanLoaiBMI(calcBMI(canNangKg, chieuCaoCm));
+  return (GOI_Y_MUC_TIEU_THEO_BMI[nhom] as readonly MucTieu[]).filter((m) =>
+    duocChon.includes(m),
+  );
 }

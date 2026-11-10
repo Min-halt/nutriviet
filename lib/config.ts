@@ -164,6 +164,7 @@ export const DIEM_CHON_MON = {
   phatGiaTietKiem: 0.3, // phong cách Tiết kiệm: cộng điểm theo giá (giá / ngân sách × hệ số)
   thuongTagUuTien: 0.1, // tầng 2: món có tag ưu tiên (vd gi_thap với tiểu đường)
   thuongDungNoiAn: 0.03, // ưu tiên nhẹ món hợp thói quen ăn ngoài / nấu nhà
+  phatVuotNganSachBua: 0.5, // món đắt hơn ngân sách bữa (vẫn trong mức linh hoạt) bị cộng điểm theo phần vượt
 } as const;
 
 // ─────────────────────────────────────────────
@@ -203,6 +204,44 @@ export const SO_NGAY_BIEU_DO = 7; // biểu đồ cột: 7 ngày gần nhất
 // ─────────────────────────────────────────────
 // Nhập số liệu món từ file CSV (npm run nhap-mon)
 // ─────────────────────────────────────────────
-export const SO_MON_TOI_THIEU = 10; // SPEC mục 5: 10–15 món
-export const SO_MON_TOI_DA = 15;
+export const SO_MON_TOI_THIEU = 10; // SPEC mục 5 ghi 10–15 món; nhóm đã đồng ý nới giới hạn trên
+export const SO_MON_TOI_DA = 25; // nhóm đã đồng ý nới từ 15 (SPEC mục 5) để thêm món giá rẻ
 export const LECH_KCAL_TOI_DA = 0.1; // 4×đạm + 4×tinh bột + 9×béo được lệch tối đa 10% so với kcal ghi
+
+// ─────────────────────────────────────────────
+// BMI — phân loại theo chuẩn châu Á (WHO khu vực châu Á – Thái Bình Dương, Bộ Y tế VN đang dùng)
+// ─────────────────────────────────────────────
+// BMI ngoài khoảng này gần như chắc chắn là gõ nhầm (vd 120 cm / 220 kg → BMI 153) → nhờ kiểm tra lại
+export const BMI_HOP_LY = { min: 12, max: 60 } as const;
+
+// Ngưỡng phân loại (BMI nhỏ hơn "duoi" thì thuộc nhóm đó)
+export const PHAN_LOAI_BMI = [
+  { duoi: 18.5, ma: "thieu_can" }, // < 18,5
+  { duoi: 23, ma: "binh_thuong" }, // 18,5 – 22,9
+  { duoi: 25, ma: "thua_can" }, // 23 – 24,9
+  { duoi: 30, ma: "beo_phi_1" }, // 25 – 29,9
+  { duoi: Infinity, ma: "beo_phi_2" }, // ≥ 30
+] as const;
+
+// BMI cao hơn mức này → tính chất đạm theo "cân nặng ứng với BMI 25" thay vì cân nặng thật,
+// tránh lượng đạm quá cao (vd 220 kg × 1,6 = 352 g). Nhóm kiểm tra lại với tài liệu môn học.
+export const BMI_THAM_CHIEU_DAM = 25;
+
+// BMI từ mức này trở lên → ghi chú nên có bác sĩ theo dõi khi giảm cân (không khóa)
+export const BMI_CAN_BAC_SI = 30;
+
+// Giảm cân: tối đa 1% cân nặng/tuần VÀ không quá 1 kg/tuần (lấy mức nhỏ hơn)
+export const GIAM_CAN_TOI_DA_KG_MOI_TUAN = 1;
+
+// Gợi ý mục tiêu ở bước 4 theo nhóm BMI (chỉ GỢI Ý — người dùng vẫn tự chọn)
+export const GOI_Y_MUC_TIEU_THEO_BMI = {
+  thieu_can: ["an_lanh_manh", "tang_co"],
+  binh_thuong: ["duy_tri", "an_lanh_manh"],
+  thua_can: ["giam_mo"],
+  beo_phi_1: ["giam_mo"],
+  beo_phi_2: ["giam_mo"],
+} as const;
+
+// Ngân sách là "TRUNG BÌNH mỗi bữa": tổng tiền cả ngày ≤ ngân sách × số bữa,
+// từng bữa được linh hoạt tối đa 1,5 lần ngân sách (vd ngân sách 20k: sáng xôi 12k → trưa được món 28k)
+export const HE_SO_NGAN_SACH_LINH_HOAT = 1.5;

@@ -28,13 +28,9 @@ test("Onboarding đầy đủ → trang Kết quả ra đúng ca tính tay A (1.
   await page.evaluate(() => localStorage.clear());
   await page.getByRole("link", { name: "Bắt đầu" }).click();
 
-  // Bước 1
+  // Bước 1 — giới tính hỏi đầu tiên; chọn Nam thì không có câu mang thai
+  await page.getByRole("radio", { name: /^Nam/ }).click();
   await page.fill("#tuoi", "20");
-  await page
-    .getByRole("radiogroup")
-    .nth(0)
-    .getByRole("radio", { name: "Không" })
-    .click();
   await page.getByRole("checkbox", { name: "Không có" }).click();
   await page
     .getByRole("radio", { name: /^Không$/ })
@@ -42,7 +38,6 @@ test("Onboarding đầy đủ → trang Kết quả ra đúng ca tính tay A (1.
     .click();
   await nut(page, "Tiếp").click();
   // Bước 2
-  await page.getByRole("radio", { name: /^Nam/ }).click();
   await page.fill("#cao", "170");
   await page.fill("#can", "65");
   await nut(page, "Tiếp").click();
@@ -278,4 +273,70 @@ test("Xóa toàn bộ dữ liệu: phải xác nhận, xóa xong về trang ch�
       Object.keys(localStorage).filter((k) => k.startsWith("nutriviet.")),
     ),
   ).toEqual([]);
+});
+
+test("Góp ý 1: chọn Nam thì không hỏi mang thai; chọn Nữ thì có", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.evaluate(() => localStorage.clear());
+  await page.goto("/onboarding");
+  await page.getByRole("radio", { name: /^Nam/ }).click();
+  await expect(page.getByText("mang thai hoặc cho con bú")).toHaveCount(0);
+  await page.getByRole("radio", { name: /^Nữ/ }).click();
+  await expect(
+    page.getByText("Bạn đang mang thai hoặc cho con bú?"),
+  ).toBeVisible();
+});
+
+test("Góp ý 2: 120 cm / 220 kg bị chặn; BMI cao được gợi ý Giảm mỡ và tính đạm hợp lý", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.evaluate(() => localStorage.clear());
+  await page.goto("/onboarding");
+  await page.getByRole("radio", { name: /^Nam/ }).click();
+  await page.fill("#tuoi", "30");
+  await page.getByRole("checkbox", { name: "Không có" }).click();
+  await page
+    .getByRole("radio", { name: /^Không$/ })
+    .last()
+    .click();
+  await nut(page, "Tiếp").click();
+  await page.fill("#cao", "120");
+  await page.fill("#can", "220");
+  await nut(page, "Tiếp").click();
+  await expect(page.getByText(/có vẻ chưa khớp/)).toBeVisible();
+
+  // Sửa thành 170 cm / 100 kg (BMI 34,6) → đi tiếp được
+  await page.fill("#cao", "170");
+  await page.fill("#can", "100");
+  await nut(page, "Tiếp").click();
+  await page.getByRole("radio", { name: /^Ngồi nhiều/ }).click();
+  await page
+    .getByRole("radiogroup")
+    .nth(1)
+    .getByRole("radio", { name: "Không" })
+    .click();
+  await nut(page, "Tiếp").click();
+  await expect(
+    page.getByRole("radio", { name: /^Giảm mỡ.*Gợi ý cho bạn/ }),
+  ).toBeVisible();
+  await expect(page.getByText(/BMI của bạn khoảng/)).toContainText("34,6");
+  await expect(
+    page.getByText(/bác sĩ hoặc chuyên gia dinh dưỡng theo dõi/),
+  ).toBeVisible();
+});
+
+test("Góp ý 3: ngân sách 20.000 đ/bữa vẫn có thực đơn đủ 7 ngày", async ({
+  page,
+}) => {
+  await datHoSo(page, { ...hoSoMau("giam-mo"), nganSachMoiBuaVnd: 20000 });
+  for (let ngay = 0; ngay < 7; ngay++) {
+    await page.goto(`/thuc-don?ngay=${ngay}`);
+    await expect(
+      page.getByRole("heading", { name: "Thực đơn 7 ngày" }),
+    ).toBeVisible();
+    await expect(page.getByText("Ngày này chưa đủ món phù hợp")).toHaveCount(0);
+  }
 });

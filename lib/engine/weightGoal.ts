@@ -1,7 +1,11 @@
 /**
  * Kiểm tra mục tiêu cân nặng: có an toàn không, nếu quá nhanh thì đề xuất thời hạn mới.
  */
-import { BMI_TOI_THIEU, TOC_DO_TOI_DA_MOI_TUAN } from "@/lib/config";
+import {
+  BMI_TOI_THIEU,
+  GIAM_CAN_TOI_DA_KG_MOI_TUAN,
+  TOC_DO_TOI_DA_MOI_TUAN,
+} from "@/lib/config";
 import { calcBMI } from "./body";
 import { EPSILON } from "./validate";
 
@@ -16,7 +20,8 @@ export interface KetQuaMucTieuCan {
   bmiMucTieu: number | null;
   kgMoiTuan: number | null; // tốc độ theo kế hoạch người dùng
   tiLeMoiTuan: number | null; // tốc độ tính theo % cân nặng hiện tại (0.01 = 1%)
-  tiLeToiDa: number; // ngưỡng cho phép
+  tiLeToiDa: number; // ngưỡng cho phép (% cân nặng/tuần)
+  kgToiDaMoiTuan: number | null; // tốc độ tối đa thực tế (kg/tuần) — giảm cân: min(1% cân nặng, 1 kg)
   soTuanDeXuat: number | null; // chỉ có khi "qua_nhanh"
   canToiThieuKg: number | null; // cân nặng thấp nhất để BMI vẫn ≥ 18.5 (làm tròn lên 0.1 kg)
 }
@@ -31,7 +36,7 @@ export function calcCanToiThieu(chieuCaoCm: number): number {
  * Thứ tự kiểm tra:
  *  1. Dữ liệu hợp lệ & đúng chiều (giảm thì cân mục tiêu phải thấp hơn, tăng thì cao hơn)
  *  2. BMI ở cân mục tiêu ≥ 18.5 (nếu không → không nhận, dù tốc độ ổn)
- *  3. Tốc độ mỗi tuần ≤ ngưỡng (giảm 1%, tăng 0.5% cân nặng hiện tại)
+ *  3. Tốc độ mỗi tuần ≤ ngưỡng (giảm: 1% cân nặng hiện tại và không quá 1 kg; tăng: 0.5%)
  *     Nếu vượt → số tuần đề xuất = làm tròn lên( số kg cần đổi / (cân hiện tại × ngưỡng) )
  */
 export function checkWeightGoal(params: {
@@ -55,6 +60,7 @@ export function checkWeightGoal(params: {
     tiLeToiDa,
     soTuanDeXuat: null,
     canToiThieuKg: null,
+    kgToiDaMoiTuan: null,
   };
 
   const soHopLe = [canHienTaiKg, canMucTieuKg, soTuan, chieuCaoCm].every(
@@ -71,6 +77,13 @@ export function checkWeightGoal(params: {
   const kgMoiTuan = kgCanDoi / soTuan;
   const tiLeMoiTuan = kgMoiTuan / canHienTaiKg;
 
+  // Tốc độ tối đa (kg/tuần): % cân nặng; riêng giảm cân không quá 1 kg/tuần
+  // (vd 220 kg × 1% = 2,2 kg/tuần là quá nhanh → giới hạn 1 kg/tuần)
+  const kgToiDaMoiTuan =
+    mucTieu === "giam_mo"
+      ? Math.min(canHienTaiKg * tiLeToiDa, GIAM_CAN_TOI_DA_KG_MOI_TUAN)
+      : canHienTaiKg * tiLeToiDa;
+
   const ketQua = {
     bmiMucTieu,
     kgMoiTuan,
@@ -78,14 +91,14 @@ export function checkWeightGoal(params: {
     tiLeToiDa,
     soTuanDeXuat: null,
     canToiThieuKg: calcCanToiThieu(chieuCaoCm),
+    kgToiDaMoiTuan,
   };
 
   if (bmiMucTieu < BMI_TOI_THIEU) {
     return { ...ketQua, trangThai: "bmi_thap" };
   }
 
-  if (tiLeMoiTuan > tiLeToiDa + EPSILON) {
-    const kgToiDaMoiTuan = canHienTaiKg * tiLeToiDa;
+  if (kgMoiTuan > kgToiDaMoiTuan + EPSILON) {
     // trừ EPSILON trước khi làm tròn lên để 20.0000000001 không thành 21
     const soTuanDeXuat = Math.ceil(kgCanDoi / kgToiDaMoiTuan - EPSILON);
     return { ...ketQua, trangThai: "qua_nhanh", soTuanDeXuat };

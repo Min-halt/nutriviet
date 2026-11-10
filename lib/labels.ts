@@ -107,6 +107,19 @@ export const GOI_Y_NOI_BO_LOC = {
   di_ung: "Nhiều món có chứa chất bạn dị ứng.",
   che_do_an: "Danh sách món phù hợp chế độ ăn của bạn còn ít.",
   khong_thich: 'Bạn có thể bỏ bớt vài món trong danh sách "Món không thích".',
-  ngan_sach: "Bạn có thể tăng ngân sách mỗi bữa thêm một chút.",
+  ngan_sach:
+    "Bạn có thể tăng ngân sách mỗi bữa thêm một chút, hoặc nấu ở nhà nhiều hơn — món nấu ở nhà thường rẻ hơn.",
   thoi_gian_nau: "Bạn có thể chọn thời gian nấu dài hơn.",
 } as const;
+
+/** Mô tả nhóm BMI — lời nhẹ nhàng, không dùng chữ "béo phì" trên giao diện */
+export const NHAN_NHOM_BMI = {
+  thieu_can: "thấp hơn khoảng khỏe mạnh",
+  binh_thuong: "trong khoảng khỏe mạnh",
+  thua_can: "cao hơn khoảng khỏe mạnh một chút",
+  beo_phi_1: "cao hơn khoảng khỏe mạnh",
+  beo_phi_2: "cao hơn khoảng khỏe mạnh",
+} as const;
+
+export const LOI_BMI_CAN_BAC_SI =
+  "Với chỉ số BMI từ 30 trở lên, giảm cân an toàn và hiệu quả nhất là khi có bác sĩ hoặc chuyên gia dinh dưỡng theo dõi.";

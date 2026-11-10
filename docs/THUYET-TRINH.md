@@ -114,12 +114,18 @@ Hiện là **số ước lượng** (đánh dấu `verified: false` và có ghi 
 **Sao có ngày báo "chưa đủ món"?**
 Đó là chủ ý: thay vì ép thực đơn sai mục tiêu, app nói thật. Với 15 món mẫu, người cần nhiều calo (> 2.200 kcal) hoặc có nhiều hạn chế sẽ gặp điều này. Hướng phát triển: bổ sung món.
 
+**Nhập 120 cm và 220 kg thì sao?**
+BMI ≈ 153 là không thể có thật, nên app chặn ngay và nhờ kiểm tra lại (chỉ nhận BMI 12–60). Với BMI cao nhưng có thật (vd 170 cm/100 kg, BMI 34,6): app phân loại theo chuẩn châu Á, gợi ý "Giảm mỡ", nhắc nên có bác sĩ theo dõi, tính đạm theo cân nặng ứng với BMI 25 (≈ 116 g thay vì 160 g), và giới hạn giảm tối đa 1 kg/tuần.
+
+**Sinh viên chỉ có 15–20 nghìn mỗi bữa thì sao?**
+Ngân sách được hiểu là trung bình mỗi bữa: bữa sáng rẻ (xôi, cháo) thì bữa trưa được đắt hơn một chút, miễn tổng ngày không vượt. Với 20.000 đ/bữa, hồ sơ giảm mỡ và tiểu đường có đủ 7 ngày thực đơn. Dưới 10.000 đ app nói rõ là chưa tìm được món đủ chất.
+
 **Dữ liệu sức khỏe lưu ở đâu?**
 Chỉ trong trình duyệt của người dùng (`localStorage`), không có tài khoản hay database máy chủ.
 
 **Làm sao biết app đúng?**
-- **239 unit test** (Vitest) cho toàn bộ engine, AI và lưu trữ, gồm các ca tính tay: `npm test`.
-- **10 test trình duyệt** (Playwright) bấm như người dùng thật trên màn hình điện thoại: `npm run test:e2e`.
+- **280 unit test** (Vitest) cho toàn bộ engine, AI và lưu trữ, gồm các ca tính tay: `npm test`.
+- **13 test trình duyệt** (Playwright) bấm như người dùng thật trên màn hình điện thoại: `npm run test:e2e`.
 
 **Vì sao người dưới 18 tuổi / mang thai không thấy số calo?**
 Công thức BMR được xây cho người lớn; khi mang thai cơ thể cần nhiều hơn TDEE; và với người có vấn đề ăn uống, việc đếm calo có thể gây hại. Theo nguyên tắc "an toàn thắng mục tiêu", app chỉ gợi ý ăn cân bằng và khuyên gặp chuyên gia.
