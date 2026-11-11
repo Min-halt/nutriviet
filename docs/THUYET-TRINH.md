@@ -132,6 +132,6 @@ Công thức BMR được xây cho người lớn; khi mang thai cơ thể cần
 
 ## 8. Giới hạn & định hướng phát triển
 
-- Số liệu món chưa kiểm chứng; mới có 15 món.
+- Số liệu món chưa kiểm chứng; mới có 21 món.
 - Mức "nhiều" chỉ ×1,3 nên người ăn nhiều có thể thiếu món.
 - Ngoài phạm vi MVP (SPEC mục 9): tài khoản, database máy chủ, chat tư vấn tự do, điều chỉnh calo theo cân nặng hằng tuần, nhận diện món qua ảnh, danh sách đi chợ, game/huy hiệu…
