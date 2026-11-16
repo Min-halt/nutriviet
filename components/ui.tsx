@@ -248,7 +248,7 @@ export function KhungTrang({
 }) {
   return (
     <main
-      className={`mx-auto flex w-full max-w-md flex-1 flex-col gap-5 px-4 pt-6 pb-24 ${rong ? "md:max-w-4xl md:px-8" : ""}`}
+      className={`mx-auto flex w-full max-w-md flex-1 flex-col gap-5 px-4 pt-6 pb-6 ${rong ? "md:max-w-4xl md:px-8" : ""}`}
     >
       {children}
     </main>

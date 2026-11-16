@@ -205,7 +205,7 @@ export const SO_NGAY_BIEU_DO = 7; // biểu đồ cột: 7 ngày gần nhất
 // Nhập số liệu món từ file CSV (npm run nhap-mon)
 // ─────────────────────────────────────────────
 export const SO_MON_TOI_THIEU = 10; // SPEC mục 5 ghi 10–15 món; nhóm đã đồng ý nới giới hạn trên
-export const SO_MON_TOI_DA = 25; // nhóm đã đồng ý nới từ 15 (SPEC mục 5) để thêm món giá rẻ
+export const SO_MON_TOI_DA = 120; // nhóm đã đồng ý nới từ 15 (SPEC mục 5) để đủ món cho mọi mức ngân sách và mức calo
 export const LECH_KCAL_TOI_DA = 0.1; // 4×đạm + 4×tinh bột + 9×béo được lệch tối đa 10% so với kcal ghi
 
 // ─────────────────────────────────────────────

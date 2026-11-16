@@ -1,0 +1,590 @@
+{
+  "_ghi_chu": [
+    "Bảng giá trị dinh dưỡng của NGUYÊN LIỆU, tính trên 100 g (hoặc 100 ml với chất lỏng).",
+    "Dùng để tính ra số liệu từng món trong data/dishes.json (xem scripts/tinh-mon.mjs).",
+    "ĐÂY LÀ SỐ ƯỚC LƯỢNG, nhóm cần đối chiếu lại với Bảng thành phần thực phẩm Việt Nam.",
+    "tinh_bot = tinh bột tiêu hóa được (đã trừ chất xơ), để công thức 4-4-9 khớp với kcal.",
+    "Sửa file này rồi chạy: npm run tinh-mon"
+  ],
+  "nguyen_lieu": {
+    "com-trang": {
+      "ten": "cơm trắng",
+      "kcal": 130,
+      "dam": 2.7,
+      "tinh_bot": 28,
+      "beo": 0.3
+    },
+    "com-gao-lut": {
+      "ten": "cơm gạo lứt",
+      "kcal": 123,
+      "dam": 2.7,
+      "tinh_bot": 25,
+      "beo": 1
+    },
+    "bun-tuoi": {
+      "ten": "bún tươi",
+      "kcal": 110,
+      "dam": 1.7,
+      "tinh_bot": 25,
+      "beo": 0.1
+    },
+    "banh-pho": {
+      "ten": "bánh phở",
+      "kcal": 110,
+      "dam": 1.9,
+      "tinh_bot": 25,
+      "beo": 0.2
+    },
+    "hu-tieu-soi": {
+      "ten": "sợi hủ tiếu",
+      "kcal": 110,
+      "dam": 2,
+      "tinh_bot": 25,
+      "beo": 0.3
+    },
+    "banh-canh-soi": {
+      "ten": "sợi bánh canh",
+      "kcal": 120,
+      "dam": 0.5,
+      "tinh_bot": 29,
+      "beo": 0.1
+    },
+    "mien-dong": {
+      "ten": "miến dong (đã nấu)",
+      "kcal": 110,
+      "dam": 0.1,
+      "tinh_bot": 27,
+      "beo": 0
+    },
+    "mi-trung-kho": {
+      "ten": "mì trứng khô",
+      "kcal": 350,
+      "dam": 11,
+      "tinh_bot": 66,
+      "beo": 4
+    },
+    "mi-goi": {
+      "ten": "mì gói",
+      "kcal": 440,
+      "dam": 9,
+      "tinh_bot": 60,
+      "beo": 18
+    },
+    "banh-mi": {
+      "ten": "bánh mì",
+      "kcal": 265,
+      "dam": 9,
+      "tinh_bot": 49,
+      "beo": 3.2
+    },
+    "xoi-nep": {
+      "ten": "xôi nếp",
+      "kcal": 180,
+      "dam": 3.5,
+      "tinh_bot": 39,
+      "beo": 0.5
+    },
+    "banh-trang": {
+      "ten": "bánh tráng",
+      "kcal": 330,
+      "dam": 4,
+      "tinh_bot": 78,
+      "beo": 0.5
+    },
+    "bot-gao": {
+      "ten": "bột gạo",
+      "kcal": 360,
+      "dam": 6,
+      "tinh_bot": 80,
+      "beo": 1
+    },
+    "bot-mi": {
+      "ten": "bột mì",
+      "kcal": 364,
+      "dam": 10,
+      "tinh_bot": 76,
+      "beo": 1
+    },
+    "chao-trang": {
+      "ten": "cháo trắng",
+      "kcal": 55,
+      "dam": 1.1,
+      "tinh_bot": 12,
+      "beo": 0.1
+    },
+
+    "thit-heo-nac": {
+      "ten": "thịt heo nạc",
+      "kcal": 143,
+      "dam": 21,
+      "tinh_bot": 0,
+      "beo": 6
+    },
+    "thit-heo-ba-chi": {
+      "ten": "thịt ba chỉ",
+      "kcal": 290,
+      "dam": 17,
+      "tinh_bot": 0,
+      "beo": 25
+    },
+    "suon-heo": {
+      "ten": "sườn heo",
+      "kcal": 240,
+      "dam": 18,
+      "tinh_bot": 0,
+      "beo": 19
+    },
+    "gio-heo": {
+      "ten": "giò heo",
+      "kcal": 230,
+      "dam": 16,
+      "tinh_bot": 0,
+      "beo": 19
+    },
+    "thit-bo-nac": {
+      "ten": "thịt bò nạc",
+      "kcal": 150,
+      "dam": 22,
+      "tinh_bot": 0,
+      "beo": 7
+    },
+    "thit-ga-khong-da": {
+      "ten": "thịt gà bỏ da",
+      "kcal": 165,
+      "dam": 31,
+      "tinh_bot": 0,
+      "beo": 3.6
+    },
+    "thit-ga-co-da": {
+      "ten": "thịt gà có da",
+      "kcal": 215,
+      "dam": 27,
+      "tinh_bot": 0,
+      "beo": 12
+    },
+    "thit-vit": {
+      "ten": "thịt vịt",
+      "kcal": 240,
+      "dam": 19,
+      "tinh_bot": 0,
+      "beo": 18
+    },
+    "cha-lua": {
+      "ten": "chả lụa",
+      "kcal": 190,
+      "dam": 15,
+      "tinh_bot": 4,
+      "beo": 13
+    },
+    "lap-xuong": {
+      "ten": "lạp xưởng",
+      "kcal": 400,
+      "dam": 15,
+      "tinh_bot": 10,
+      "beo": 35
+    },
+    "xuc-xich": {
+      "ten": "xúc xích",
+      "kcal": 300,
+      "dam": 12,
+      "tinh_bot": 5,
+      "beo": 26
+    },
+    "trung-ga": {
+      "ten": "trứng gà",
+      "kcal": 155,
+      "dam": 13,
+      "tinh_bot": 1.1,
+      "beo": 11
+    },
+    "trung-vit": {
+      "ten": "trứng vịt",
+      "kcal": 185,
+      "dam": 13,
+      "tinh_bot": 1.5,
+      "beo": 14
+    },
+    "trung-cut": {
+      "ten": "trứng cút",
+      "kcal": 158,
+      "dam": 13,
+      "tinh_bot": 0.4,
+      "beo": 11
+    },
+
+    "ca-loc": {
+      "ten": "cá lóc",
+      "kcal": 97,
+      "dam": 18.2,
+      "tinh_bot": 0,
+      "beo": 2.7
+    },
+    "ca-nuc": {
+      "ten": "cá nục",
+      "kcal": 130,
+      "dam": 21,
+      "tinh_bot": 0,
+      "beo": 5
+    },
+    "ca-thu": {
+      "ten": "cá thu",
+      "kcal": 190,
+      "dam": 21,
+      "tinh_bot": 0,
+      "beo": 11
+    },
+    "ca-basa": {
+      "ten": "cá basa",
+      "kcal": 125,
+      "dam": 15,
+      "tinh_bot": 0,
+      "beo": 7
+    },
+    "cha-ca": {
+      "ten": "chả cá",
+      "kcal": 170,
+      "dam": 14,
+      "tinh_bot": 8,
+      "beo": 9
+    },
+    "tom": { "ten": "tôm", "kcal": 99, "dam": 21, "tinh_bot": 0.9, "beo": 1 },
+    "cua-dong": {
+      "ten": "cua đồng",
+      "kcal": 97,
+      "dam": 19,
+      "tinh_bot": 0,
+      "beo": 1.5
+    },
+    "muc": { "ten": "mực", "kcal": 92, "dam": 16, "tinh_bot": 3, "beo": 1.4 },
+    "ngheu": { "ten": "nghêu", "kcal": 86, "dam": 14, "tinh_bot": 4, "beo": 1 },
+    "luon": {
+      "ten": "lươn",
+      "kcal": 180,
+      "dam": 18,
+      "tinh_bot": 0,
+      "beo": 11.7
+    },
+
+    "dau-hu": {
+      "ten": "đậu hũ",
+      "kcal": 80,
+      "dam": 8,
+      "tinh_bot": 2,
+      "beo": 4.8
+    },
+    "dau-hu-chien": {
+      "ten": "đậu hũ chiên",
+      "kcal": 190,
+      "dam": 12,
+      "tinh_bot": 3,
+      "beo": 15
+    },
+    "dau-xanh": {
+      "ten": "đậu xanh (khô)",
+      "kcal": 345,
+      "dam": 24,
+      "tinh_bot": 53,
+      "beo": 1.2
+    },
+    "dau-den": {
+      "ten": "đậu đen (khô)",
+      "kcal": 340,
+      "dam": 22,
+      "tinh_bot": 54,
+      "beo": 1.5
+    },
+    "dau-do": {
+      "ten": "đậu đỏ (khô)",
+      "kcal": 335,
+      "dam": 21,
+      "tinh_bot": 53,
+      "beo": 1.3
+    },
+    "dau-phong": {
+      "ten": "đậu phộng",
+      "kcal": 567,
+      "dam": 26,
+      "tinh_bot": 8,
+      "beo": 49
+    },
+    "me-rang": {
+      "ten": "mè rang",
+      "kcal": 570,
+      "dam": 18,
+      "tinh_bot": 11,
+      "beo": 48
+    },
+    "hat-dieu": {
+      "ten": "hạt điều",
+      "kcal": 550,
+      "dam": 18,
+      "tinh_bot": 27,
+      "beo": 44
+    },
+
+    "rau-cai-xanh": {
+      "ten": "rau cải xanh",
+      "kcal": 22,
+      "dam": 2.2,
+      "tinh_bot": 2.5,
+      "beo": 0.2
+    },
+    "rau-muong": {
+      "ten": "rau muống",
+      "kcal": 23,
+      "dam": 2.6,
+      "tinh_bot": 2.5,
+      "beo": 0.2
+    },
+    "rau-den": {
+      "ten": "rau dền",
+      "kcal": 23,
+      "dam": 2.5,
+      "tinh_bot": 3,
+      "beo": 0.3
+    },
+    "rau-thom": {
+      "ten": "rau thơm, hành lá",
+      "kcal": 30,
+      "dam": 1.8,
+      "tinh_bot": 5,
+      "beo": 0.3
+    },
+    "gia-do": {
+      "ten": "giá đỗ",
+      "kcal": 30,
+      "dam": 3,
+      "tinh_bot": 4,
+      "beo": 0.2
+    },
+    "bap-cai": {
+      "ten": "bắp cải",
+      "kcal": 25,
+      "dam": 1.3,
+      "tinh_bot": 4.3,
+      "beo": 0.1
+    },
+    "ca-chua": {
+      "ten": "cà chua",
+      "kcal": 17,
+      "dam": 0.9,
+      "tinh_bot": 2.7,
+      "beo": 0.2
+    },
+    "dua-leo": {
+      "ten": "dưa leo",
+      "kcal": 16,
+      "dam": 0.7,
+      "tinh_bot": 3,
+      "beo": 0.1
+    },
+    "ca-rot": {
+      "ten": "cà rốt",
+      "kcal": 35,
+      "dam": 0.9,
+      "tinh_bot": 7,
+      "beo": 0.2
+    },
+    "su-su": {
+      "ten": "su su",
+      "kcal": 24,
+      "dam": 0.8,
+      "tinh_bot": 4.5,
+      "beo": 0.1
+    },
+    "bi-do": {
+      "ten": "bí đỏ",
+      "kcal": 26,
+      "dam": 1,
+      "tinh_bot": 5,
+      "beo": 0.1
+    },
+    "bi-xanh": {
+      "ten": "bí xanh",
+      "kcal": 20,
+      "dam": 0.6,
+      "tinh_bot": 4,
+      "beo": 0.1
+    },
+    "mang": {
+      "ten": "măng",
+      "kcal": 27,
+      "dam": 2.6,
+      "tinh_bot": 3.5,
+      "beo": 0.3
+    },
+    "dau-que": {
+      "ten": "đậu que",
+      "kcal": 29,
+      "dam": 1.8,
+      "tinh_bot": 5,
+      "beo": 0.1
+    },
+    "hanh-tay": {
+      "ten": "hành tây",
+      "kcal": 40,
+      "dam": 1.1,
+      "tinh_bot": 8,
+      "beo": 0.1
+    },
+    "nam-rom": {
+      "ten": "nấm rơm",
+      "kcal": 35,
+      "dam": 3.8,
+      "tinh_bot": 4.5,
+      "beo": 0.3
+    },
+    "bap-ngot": {
+      "ten": "bắp ngọt",
+      "kcal": 96,
+      "dam": 3.4,
+      "tinh_bot": 18,
+      "beo": 1.5
+    },
+    "khoai-lang": {
+      "ten": "khoai lang",
+      "kcal": 90,
+      "dam": 1.6,
+      "tinh_bot": 19,
+      "beo": 0.1
+    },
+    "khoai-tay": {
+      "ten": "khoai tây",
+      "kcal": 87,
+      "dam": 2,
+      "tinh_bot": 18,
+      "beo": 0.1
+    },
+    "khoai-mon": {
+      "ten": "khoai môn",
+      "kcal": 112,
+      "dam": 1.5,
+      "tinh_bot": 24,
+      "beo": 0.2
+    },
+
+    "chuoi": {
+      "ten": "chuối",
+      "kcal": 90,
+      "dam": 1.1,
+      "tinh_bot": 20,
+      "beo": 0.3
+    },
+    "cam": { "ten": "cam", "kcal": 47, "dam": 0.9, "tinh_bot": 10, "beo": 0.1 },
+    "du-du": {
+      "ten": "đu đủ",
+      "kcal": 43,
+      "dam": 0.5,
+      "tinh_bot": 9.5,
+      "beo": 0.3
+    },
+    "dua-hau": {
+      "ten": "dưa hấu",
+      "kcal": 30,
+      "dam": 0.6,
+      "tinh_bot": 7,
+      "beo": 0.2
+    },
+    "oi": { "ten": "ổi", "kcal": 50, "dam": 2.6, "tinh_bot": 8, "beo": 0.6 },
+    "thanh-long": {
+      "ten": "thanh long",
+      "kcal": 50,
+      "dam": 1.1,
+      "tinh_bot": 11,
+      "beo": 0.2
+    },
+
+    "sua-dau-nanh": {
+      "ten": "sữa đậu nành",
+      "kcal": 54,
+      "dam": 3.3,
+      "tinh_bot": 5,
+      "beo": 1.8
+    },
+    "sua-tuoi": {
+      "ten": "sữa tươi",
+      "kcal": 60,
+      "dam": 3.2,
+      "tinh_bot": 4.8,
+      "beo": 3.2
+    },
+    "sua-dac": {
+      "ten": "sữa đặc",
+      "kcal": 320,
+      "dam": 8,
+      "tinh_bot": 55,
+      "beo": 8
+    },
+    "sua-chua": {
+      "ten": "sữa chua",
+      "kcal": 70,
+      "dam": 3.5,
+      "tinh_bot": 9,
+      "beo": 2.5
+    },
+    "pho-mai": {
+      "ten": "phô mai",
+      "kcal": 350,
+      "dam": 25,
+      "tinh_bot": 2,
+      "beo": 27
+    },
+    "nuoc-cot-dua": {
+      "ten": "nước cốt dừa",
+      "kcal": 230,
+      "dam": 2.3,
+      "tinh_bot": 6,
+      "beo": 24
+    },
+
+    "dau-an": {
+      "ten": "dầu ăn",
+      "kcal": 884,
+      "dam": 0,
+      "tinh_bot": 0,
+      "beo": 100
+    },
+    "duong": {
+      "ten": "đường",
+      "kcal": 400,
+      "dam": 0,
+      "tinh_bot": 100,
+      "beo": 0
+    },
+    "nuoc-mam": {
+      "ten": "nước mắm",
+      "kcal": 50,
+      "dam": 10,
+      "tinh_bot": 2,
+      "beo": 0
+    },
+    "nuoc-tuong": {
+      "ten": "nước tương",
+      "kcal": 55,
+      "dam": 8,
+      "tinh_bot": 5,
+      "beo": 0.1
+    },
+    "mam-tom": {
+      "ten": "mắm tôm",
+      "kcal": 80,
+      "dam": 15,
+      "tinh_bot": 4,
+      "beo": 0.5
+    },
+    "nuoc-dung-xuong": {
+      "ten": "nước dùng xương",
+      "kcal": 15,
+      "dam": 1.5,
+      "tinh_bot": 0.5,
+      "beo": 0.7
+    },
+    "nuoc-dung-rau": {
+      "ten": "nước dùng rau củ",
+      "kcal": 8,
+      "dam": 0.4,
+      "tinh_bot": 1.2,
+      "beo": 0.1
+    }
+  }
+}

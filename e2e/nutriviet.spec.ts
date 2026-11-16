@@ -190,7 +190,10 @@ test("Ăn chay + ngân sách thấp → báo 'chưa đủ món', không ép th�
   await datHoSo(page, {
     ...hoSoMau("giam-mo"),
     cheDoAn: "chay",
-    nganSachMoiBuaVnd: 15000,
+    // 10.000 đ là mức ngân sách thấp nhất app nhận. Với 100 món hiện có,
+    // mức 15.000 đ đã đủ món chay cho cả tuần nên phải xuống mức sàn mới
+    // còn ngày thiếu món — đúng tình huống cần kiểm tra.
+    nganSachMoiBuaVnd: 10000,
   });
   await page.goto("/thuc-don?ngay=6");
   await expect(page.getByText("Ngày này chưa đủ món phù hợp")).toBeVisible();

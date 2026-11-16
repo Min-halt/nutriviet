@@ -16,11 +16,11 @@ NutriViet giúp sinh viên **ăn lành mạnh bằng món Việt với ngân sá
 
 ## 2. Ba nguyên tắc thiết kế (điểm nhấn khi thuyết trình)
 
-| Nguyên tắc | Nghĩa là | Vì sao |
-|---|---|---|
-| **Số liệu do code tính, không do AI** | BMR, TDEE, calo, macro, khẩu phần đều là công thức trong `lib/engine/` | AI có thể "bịa" số. Công thức thì kiểm tra được, có test, giải thích được từng bước |
+| Nguyên tắc                                        | Nghĩa là                                                                 | Vì sao                                                                                       |
+| ------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| **Số liệu do code tính, không do AI**             | BMR, TDEE, calo, macro, khẩu phần đều là công thức trong `lib/engine/`   | AI có thể "bịa" số. Công thức thì kiểm tra được, có test, giải thích được từng bước          |
 | **AI chỉ chọn món có sẵn và viết lời giải thích** | Mọi kết quả AI đều bị code kiểm tra lại; sai thì dùng phương án dự phòng | App luôn chạy được kể cả khi AI lỗi; AI không thể gợi ý món không có thật hay vi phạm dị ứng |
-| **An toàn luôn thắng mục tiêu người dùng** | Có 3 tầng an toàn (mục 5 bên dưới) | App về dinh dưỡng có thể gây hại nếu khuyến khích ăn kiêng sai cách |
+| **An toàn luôn thắng mục tiêu người dùng**        | Có 3 tầng an toàn (mục 5 bên dưới)                                       | App về dinh dưỡng có thể gây hại nếu khuyến khích ăn kiêng sai cách                          |
 
 ## 3. Luồng tính toán (đọc kèm sơ đồ trong README)
 
@@ -30,15 +30,15 @@ Hồ sơ → [An toàn] → BMR → TDEE → Calo mục tiêu (mức sàn) → M
 
 ### Ví dụ tính tay — Ca A (nam, 20 tuổi, 170 cm, 65 kg, ngồi nhiều, giảm mỡ)
 
-| Bước | Công thức | Kết quả |
-|---|---|---|
-| BMR (Mifflin-St Jeor) | 10 × 65 + 6,25 × 170 − 5 × 20 + 5 | **1.617,5 kcal** |
-| TDEE | 1.617,5 × 1,2 (ngồi nhiều) + 0 (không tập) | **1.941 kcal** |
-| Calo mục tiêu | 1.941 × (1 − 15%) | **1.650 kcal** |
-| Mức sàn | max(BMR 1.617,5; 1.500 với nam) | 1.617,5 → 1.650 cao hơn nên giữ nguyên |
-| Protein | 1,6 g/kg × 65 kg | **104 g** (416 kcal) |
-| Chất béo | 25% × 1.650 = 413 kcal ÷ 9 | **46 g** |
-| Tinh bột | (1.650 − 416 − 413) ÷ 4 | **205 g** |
+| Bước                  | Công thức                                  | Kết quả                                |
+| --------------------- | ------------------------------------------ | -------------------------------------- |
+| BMR (Mifflin-St Jeor) | 10 × 65 + 6,25 × 170 − 5 × 20 + 5          | **1.617,5 kcal**                       |
+| TDEE                  | 1.617,5 × 1,2 (ngồi nhiều) + 0 (không tập) | **1.941 kcal**                         |
+| Calo mục tiêu         | 1.941 × (1 − 15%)                          | **1.650 kcal**                         |
+| Mức sàn               | max(BMR 1.617,5; 1.500 với nam)            | 1.617,5 → 1.650 cao hơn nên giữ nguyên |
+| Protein               | 1,6 g/kg × 65 kg                           | **104 g** (416 kcal)                   |
+| Chất béo              | 25% × 1.650 = 413 kcal ÷ 9                 | **46 g**                               |
+| Tinh bột              | (1.650 − 416 − 413) ÷ 4                    | **205 g**                              |
 
 ### Ví dụ có tập thể thao — hồ sơ mẫu "bóng đá" (nam, 20 tuổi, 172 cm, 62 kg, đá bóng 3 × 90 phút, cường độ vừa, tăng cơ)
 
@@ -65,11 +65,11 @@ Hồ sơ → [An toàn] → BMR → TDEE → Calo mục tiêu (mức sàn) → M
 
 ## 4. AI được dùng ở đâu và bị kiểm soát thế nào
 
-| Tính năng | AI trả về | Code kiểm tra | AI lỗi thì |
-|---|---|---|---|
-| Nhập món bằng chat | `{ meal, dish_id, portion }` (JSON đúng khuôn) | Món có trong database? bữa/khẩu phần hợp lệ? Người dùng bấm Lưu mới ghi | Dò từ khóa + so tên món không dấu |
-| Vì sao chọn món này? | 2–3 câu | Mọi con số trong câu phải là số engine đã tính | Câu ghép từ số liệu |
-| Chọn món đa dạng | Danh sách id món cho 7 ngày | Món nằm trong danh sách đã lọc, ≤ 2 lần/tuần, engine tự tính khẩu phần, mỗi ngày ±10% | Giữ thực đơn rule-based |
+| Tính năng            | AI trả về                                      | Code kiểm tra                                                                         | AI lỗi thì                        |
+| -------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------- | --------------------------------- |
+| Nhập món bằng chat   | `{ meal, dish_id, portion }` (JSON đúng khuôn) | Món có trong database? bữa/khẩu phần hợp lệ? Người dùng bấm Lưu mới ghi               | Dò từ khóa + so tên món không dấu |
+| Vì sao chọn món này? | 2–3 câu                                        | Mọi con số trong câu phải là số engine đã tính                                        | Câu ghép từ số liệu               |
+| Chọn món đa dạng     | Danh sách id món cho 7 ngày                    | Món nằm trong danh sách đã lọc, ≤ 2 lần/tuần, engine tự tính khẩu phần, mỗi ngày ±10% | Giữ thực đơn rule-based           |
 
 - AI chỉ chạy ở **máy chủ**; API key không bao giờ xuống trình duyệt.
 - Chỉ gửi cho AI: mục tiêu, phong cách, calo bữa, tên món. **Không gửi** tuổi, cân nặng, tên bệnh.
@@ -77,13 +77,14 @@ Hồ sơ → [An toàn] → BMR → TDEE → Calo mục tiêu (mức sàn) → M
 
 ## 5. An toàn — 3 tầng (SPEC mục 4)
 
-| Tầng | Ai | App làm gì |
-|---|---|---|
-| **1** | Dưới 18 tuổi · mang thai/cho con bú · bệnh thận · có (hoặc không muốn trả lời) vấn đề ăn uống · BMI < 18,5 mà chọn giảm mỡ | Chỉ cho "Ăn cân bằng", khuyên gặp chuyên gia, **ẩn mọi con số calo**, **tắt giảm bù** |
-| **2** | Tiểu đường · gout · huyết áp cao | Loại món nhiều đường / nhiều purine / nhiều muối; ưu tiên món đường huyết thấp; luôn hiện "Đây là gợi ý chung, không thay thế chỉ định của bác sĩ" |
-| **3** | Dị ứng, ăn chay, không thịt heo, ngân sách, thời gian nấu | Lọc món; ăn ngoài + có dị ứng thì nhắc "app không đảm bảo món không lẫn chất gây dị ứng" |
+| Tầng  | Ai                                                                                                                         | App làm gì                                                                                                                                         |
+| ----- | -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1** | Dưới 18 tuổi · mang thai/cho con bú · bệnh thận · có (hoặc không muốn trả lời) vấn đề ăn uống · BMI < 18,5 mà chọn giảm mỡ | Chỉ cho "Ăn cân bằng", khuyên gặp chuyên gia, **ẩn mọi con số calo**, **tắt giảm bù**                                                              |
+| **2** | Tiểu đường · gout · huyết áp cao                                                                                           | Loại món nhiều đường / nhiều purine / nhiều muối; ưu tiên món đường huyết thấp; luôn hiện "Đây là gợi ý chung, không thay thế chỉ định của bác sĩ" |
+| **3** | Dị ứng, ăn chay, không thịt heo, ngân sách, thời gian nấu                                                                  | Lọc món; ăn ngoài + có dị ứng thì nhắc "app không đảm bảo món không lẫn chất gây dị ứng"                                                           |
 
 Ngoài ra:
+
 - **Mục tiêu cân nặng quá nhanh** (giảm > 1%/tuần, tăng > 0,5%/tuần) → đề xuất thời hạn mới. BMI ở cân mục tiêu < 18,5 → không nhận mục tiêu.
 - **3 ngày liền ăn dưới mức sàn** → thông điệp quan tâm, gợi ý nói chuyện với người thân/chuyên gia, không siết thêm calo.
 - **Không phán xét:** dùng "Lỡ ăn rồi", "không sao cả"; không dùng màu đỏ hay chữ "vượt mức".
@@ -95,7 +96,7 @@ Ngoài ra:
 3. **"Vì sao chọn món này?"** → đọc lời giải thích (chỉ nhãn "Gợi ý bởi AI" hoặc "tự động").
 4. **Hôm nay** → **Nhập nhanh** "trưa ăn cơm tấm sườn hơi nhiều" → Lưu. Bấm **"Lỡ ăn rồi"** vài món → chỉ câu "không sao cả" và dòng chia bù 3 ngày.
 5. **Hồ sơ → "Dùng hồ sơ mẫu" → "Người tiểu đường"** → chỉ ghi chú bác sĩ, thực đơn không có món nhiều đường.
-6. *(Nếu còn thời gian)* Làm onboarding với **tuổi 17** → chỉ còn "Ăn cân bằng", không hiện con số calo.
+6. _(Nếu còn thời gian)_ Làm onboarding với **tuổi 17** → chỉ còn "Ăn cân bằng", không hiện con số calo.
 
 ## 7. Câu hỏi giảng viên có thể hỏi
 
@@ -112,18 +113,32 @@ App vẫn chạy đủ. Mỗi tính năng AI đều có phương án dự phòng
 Hiện là **số ước lượng** (đánh dấu `verified: false` và có ghi chú trên giao diện). Nhóm sẽ thay bằng số liệu theo **Bảng thành phần thực phẩm Việt Nam**. Nhóm nhập số liệu qua file Excel/CSV bằng lệnh `npm run nhap-mon`; công cụ tự kiểm tra 4 × đạm + 4 × tinh bột + 9 × béo phải gần đúng tổng calo, và bắt buộc khai dị ứng khi nguyên liệu có nước mắm, mắm tôm, đậu phộng. Món đã kiểm tra hiện nguồn số liệu ngay trên giao diện.
 
 **Sao có ngày báo "chưa đủ món"?**
-Đó là chủ ý: thay vì ép thực đơn sai mục tiêu, app nói thật. Với 15 món mẫu, người cần nhiều calo (> 2.200 kcal) hoặc có nhiều hạn chế sẽ gặp điều này. Hướng phát triển: bổ sung món.
+Đó là chủ ý: thay vì ép thực đơn sai mục tiêu, app nói thật. Với 100 món hiện tại, từ 15.000 đ/bữa trở lên cả 3 hồ sơ mẫu đều đủ 7 ngày. Chỉ còn mức 10.000 đ/bữa là thiếu — đó là giới hạn thật của giá món, không phải lỗi thuật toán.
 
 **Nhập 120 cm và 220 kg thì sao?**
 BMI ≈ 153 là không thể có thật, nên app chặn ngay và nhờ kiểm tra lại (chỉ nhận BMI 12–60). Với BMI cao nhưng có thật (vd 170 cm/100 kg, BMI 34,6): app phân loại theo chuẩn châu Á, gợi ý "Giảm mỡ", nhắc nên có bác sĩ theo dõi, tính đạm theo cân nặng ứng với BMI 25 (≈ 116 g thay vì 160 g), và giới hạn giảm tối đa 1 kg/tuần.
 
 **Sinh viên chỉ có 15–20 nghìn mỗi bữa thì sao?**
-Ngân sách được hiểu là trung bình mỗi bữa: bữa sáng rẻ (xôi, cháo) thì bữa trưa được đắt hơn một chút, miễn tổng ngày không vượt. Với 20.000 đ/bữa, hồ sơ giảm mỡ và tiểu đường có đủ 7 ngày thực đơn. Dưới 10.000 đ app nói rõ là chưa tìm được món đủ chất.
+Ngân sách được hiểu là trung bình mỗi bữa: bữa sáng rẻ (xôi, cháo) thì bữa trưa được đắt hơn một chút, miễn tổng ngày không vượt. Số ngày có thực đơn (trên 7) đo trên 3 hồ sơ mẫu:
+
+| Hồ sơ             | 10k | 12k | 15k | 20k trở lên |
+| ----------------- | --- | --- | --- | ----------- |
+| giảm mỡ           | 2   | 7   | 7   | 7           |
+| bóng đá (tăng cơ) | 0   | 7   | 7   | 7           |
+| tiểu đường        | 0   | 5   | 7   | 7           |
+
+Từ 15.000 đ/bữa là đủ cả tuần. Ở mức sàn 10.000 đ app nói rõ là chưa tìm được món đủ chất — nói thật còn hơn ép một thực đơn sai mục tiêu.
+
+**Số liệu 100 món lấy đâu ra, có phải AI bịa không?**
+Không. 79 món được **cộng từ khối lượng nguyên liệu**: mỗi món ghi rõ bao nhiêu gam cơm, thịt, rau, dầu; bảng giá trị /100 g của nguyên liệu nằm ở `data/nguyen-lieu-100g.json`; script `npm run tinh-mon` cộng lại. 21 món còn lại là số nhóm ước lượng tay từ giai đoạn đầu.
+Cả 100 món vẫn là **số ước lượng** (`verified: false`) và hiện rõ trên giao diện. Công cụ tự chặn số vô lý: 4 × đạm + 4 × tinh bột + 9 × béo phải gần đúng tổng calo (lệch tối đa 10%), và bắt buộc khai dị ứng khi nguyên liệu có nước mắm, mắm tôm, đậu phộng.
+Điểm mạnh của cách này: khi nhóm thay bảng nguyên liệu bằng số của Bảng thành phần thực phẩm Việt Nam, **79 món cập nhật cùng lúc** chỉ bằng một lệnh.
 
 **Dữ liệu sức khỏe lưu ở đâu?**
 Chỉ trong trình duyệt của người dùng (`localStorage`), không có tài khoản hay database máy chủ.
 
 **Làm sao biết app đúng?**
+
 - **280 unit test** (Vitest) cho toàn bộ engine, AI và lưu trữ, gồm các ca tính tay: `npm test`.
 - **13 test trình duyệt** (Playwright) bấm như người dùng thật trên màn hình điện thoại: `npm run test:e2e`.
 
@@ -132,6 +147,7 @@ Công thức BMR được xây cho người lớn; khi mang thai cơ thể cần
 
 ## 8. Giới hạn & định hướng phát triển
 
-- Số liệu món chưa kiểm chứng; mới có 21 món.
+- Số liệu 100 món đều chưa kiểm chứng (`verified: false`); nhóm sẽ đối chiếu Bảng thành phần thực phẩm Việt Nam.
+- Ngân sách 10.000 đ/bữa vẫn chưa đủ món; cần bổ sung món tự nấu giá rẻ và giá thực tế tại Đà Nẵng.
 - Mức "nhiều" chỉ ×1,3 nên người ăn nhiều có thể thiếu món.
 - Ngoài phạm vi MVP (SPEC mục 9): tài khoản, database máy chủ, chat tư vấn tự do, điều chỉnh calo theo cân nặng hằng tuần, nhận diện món qua ảnh, danh sách đi chợ, game/huy hiệu…

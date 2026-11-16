@@ -18,31 +18,47 @@ Dành cho nhóm khi thay số liệu ước lượng bằng số liệu đã ki�
    ```bash
    npm run nhap-mon
    ```
+
    - Nếu có lỗi: công cụ ghi rõ **dòng nào, cột nào, sai gì** và **không thay đổi gì** trong app. Sửa trong file CSV rồi chạy lại.
    - Nếu thành công: dữ liệu mới đã vào `data/dishes.json`.
 6. Chạy `npm test` để chắc thực đơn vẫn tạo đúng với số liệu mới, rồi commit.
 
 > Không cài được Node.js? Gửi file CSV cho người làm code (hoặc Claude) để chạy giúp các bước 4–6.
 
+## Hai cách thêm/sửa món
+
+|                     | Cách 1 — file CSV                                                                     | Cách 2 — công thức nguyên liệu                                                                   |
+| ------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Sửa file nào        | `data/mon-an.csv`                                                                     | `data/mon-cong-thuc.json` + `data/nguyen-lieu-100g.json`                                         |
+| Ghi số calo thế nào | gõ tay từng món                                                                       | **không gõ** — máy cộng từ số gam nguyên liệu                                                    |
+| Lệnh chạy           | `npm run nhap-mon`                                                                    | `npm run tinh-mon`                                                                               |
+| Dùng khi            | đã có số liệu đã kiểm tra của **món** (vd đo thực tế, hoặc tài liệu ghi sẵn theo món) | mới chỉ có số liệu của **nguyên liệu** (Bảng thành phần thực phẩm Việt Nam ghi theo nguyên liệu) |
+
+Hiện 79 trong 100 món được tính bằng cách 2, 21 món còn lại là số nhóm ước lượng tay từ giai đoạn đầu. Cả 100 món đều đang `verified: false`.
+
+**Mẹo:** sửa bảng `data/nguyen-lieu-100g.json` theo Bảng thành phần thực phẩm Việt Nam rồi chạy `npm run tinh-mon` là **79 món cập nhật cùng lúc** — nhanh hơn sửa từng món trong CSV rất nhiều.
+
+> Lưu ý: `npm run tinh-mon` sẽ ghi đè số liệu của những món có công thức. Nếu nhóm đã sửa tay món đó trong CSV thì phải sửa ở công thức, không sửa ở CSV.
+
 ## Ý nghĩa các cột
 
-| Cột | Ghi gì | Ví dụ |
-|---|---|---|
-| `id` | Mã món, chữ thường không dấu, nối bằng `-`. **Không đổi id của món đã có** (nhật ký người dùng lưu theo id) | `com-tam-suon` |
-| `ten_mon` | Tên hiển thị | `Cơm tấm sườn` |
-| `bua` | Bữa phù hợp, nhiều bữa ngăn bằng `\|` | `sang\|trua\|toi` |
-| `kcal`, `dam_g`, `tinh_bot_g`, `beo_g` | Dinh dưỡng của **phần vừa** | `600`, `30`, `75`, `20` |
-| `he_so_it`, `he_so_vua`, `he_so_nhieu` | Hệ số khẩu phần so với phần vừa (`he_so_vua` luôn là 1) | `0,7`, `1`, `1,3` |
-| `gia_vnd` | Giá ước tính một phần | `35000` |
-| `phut_nau` | Thời gian nấu (món mua ngoài ghi `0`) | `20` |
-| `an_ngoai` | Thường mua ngoài? `true` / `false` | `true` |
-| `che_do` | `chay`, `khong_heo` (để trống nếu không) | `chay\|khong_heo` |
-| `di_ung` | Mã chất gây dị ứng (bảng dưới) | `nuoc_mam\|dau_phong` |
-| `nhan_suc_khoe` | `nhieu_duong`, `gi_thap`, `nhieu_purine`, `nhieu_muoi` | `nhieu_muoi` |
-| `nhan_phong_cach` | `high_protein`, `tiet_kiem`, `nhanh_15p` | `tiet_kiem` |
-| `nguyen_lieu` | Nguyên liệu, ngăn bằng `\|` | `cơm tấm\|sườn heo nướng\|nước mắm` |
-| `nguon_so_lieu` | Nguồn số liệu (bắt buộc khi `verified` = `true`) | `BTPTP VN 2007` |
-| `verified` | Đã kiểm tra? `true` / `false` | `true` |
+| Cột                                    | Ghi gì                                                                                                      | Ví dụ                               |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `id`                                   | Mã món, chữ thường không dấu, nối bằng `-`. **Không đổi id của món đã có** (nhật ký người dùng lưu theo id) | `com-tam-suon`                      |
+| `ten_mon`                              | Tên hiển thị                                                                                                | `Cơm tấm sườn`                      |
+| `bua`                                  | Bữa phù hợp, nhiều bữa ngăn bằng `\|`                                                                       | `sang\|trua\|toi`                   |
+| `kcal`, `dam_g`, `tinh_bot_g`, `beo_g` | Dinh dưỡng của **phần vừa**                                                                                 | `600`, `30`, `75`, `20`             |
+| `he_so_it`, `he_so_vua`, `he_so_nhieu` | Hệ số khẩu phần so với phần vừa (`he_so_vua` luôn là 1)                                                     | `0,7`, `1`, `1,3`                   |
+| `gia_vnd`                              | Giá ước tính một phần                                                                                       | `35000`                             |
+| `phut_nau`                             | Thời gian nấu (món mua ngoài ghi `0`)                                                                       | `20`                                |
+| `an_ngoai`                             | Thường mua ngoài? `true` / `false`                                                                          | `true`                              |
+| `che_do`                               | `chay`, `khong_heo` (để trống nếu không)                                                                    | `chay\|khong_heo`                   |
+| `di_ung`                               | Mã chất gây dị ứng (bảng dưới)                                                                              | `nuoc_mam\|dau_phong`               |
+| `nhan_suc_khoe`                        | `nhieu_duong`, `gi_thap`, `nhieu_purine`, `nhieu_muoi`                                                      | `nhieu_muoi`                        |
+| `nhan_phong_cach`                      | `high_protein`, `tiet_kiem`, `nhanh_15p`                                                                    | `tiet_kiem`                         |
+| `nguyen_lieu`                          | Nguyên liệu, ngăn bằng `\|`                                                                                 | `cơm tấm\|sườn heo nướng\|nước mắm` |
+| `nguon_so_lieu`                        | Nguồn số liệu (bắt buộc khi `verified` = `true`)                                                            | `BTPTP VN 2007`                     |
+| `verified`                             | Đã kiểm tra? `true` / `false`                                                                               | `true`                              |
 
 **Mã dị ứng:** `dau_phong` (đậu phộng) · `hai_san_vo` (tôm, cua) · `ca` (cá) · `trung` (trứng) · `sua` (sữa) · `dau_nanh` (đậu nành) · `gluten` (lúa mì) · `nuoc_mam` (nước mắm) · `mam_tom` (mắm tôm).
 
@@ -54,7 +70,7 @@ Dành cho nhóm khi thay số liệu ước lượng bằng số liệu đã ki�
 - **An toàn dị ứng:** nguyên liệu có "nước mắm", "mắm tôm / mắm ruốc", "đậu phộng / lạc rang" thì cột `di_ung` bắt buộc phải có mã tương ứng.
 - Mã dị ứng, chế độ ăn, nhãn đều phải nằm trong danh sách cho phép.
 - Món `verified` = `true` phải có nguồn số liệu.
-- Số món nằm trong giới hạn ở `lib/config.ts` (hiện 10–25 món; nhóm đã đồng ý nới từ 15 món của SPEC).
+- Số món nằm trong giới hạn ở `lib/config.ts` (hiện 10–120 món; nhóm đã đồng ý nới từ 15 món của SPEC).
 
 Excel lưu CSV kiểu tiếng Việt (dấu `;`, số thập phân `0,7`) cũng đọc được.
 

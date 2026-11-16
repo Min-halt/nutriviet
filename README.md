@@ -22,16 +22,16 @@ npm run dev
 
 Mở http://localhost:3000 (bật chế độ xem điện thoại trong trình duyệt bằng F12 cho giống thật). Muốn demo nhanh, bấm **"Dùng hồ sơ mẫu"** ở trang chủ.
 
-| Lệnh | Tác dụng |
-|---|---|
-| `npm run dev` | Chạy bản phát triển |
-| `npm test` | Chạy toàn bộ unit test (Vitest) cho engine, AI, lưu trữ |
-| `npm run test:e2e` | Chạy test trình duyệt (Playwright) — cần `npm run build` trước. Máy mới cài trình duyệt một lần: `npx playwright install chromium` |
-| `npm run build` | Build bản chính thức (Vercel cũng chạy lệnh này) |
-| `npm run lint` | Kiểm tra lỗi viết code |
-| `npm run nhap-mon` | Nhập số liệu món từ `data/mon-an.csv` vào database, có kiểm tra lỗi (xem [`docs/HUONG-DAN-NHAP-SO-LIEU.md`](docs/HUONG-DAN-NHAP-SO-LIEU.md)) — cần Node.js 22.18 trở lên |
-| `npm run xuat-csv` | Tạo lại `data/mon-an.csv` từ database hiện tại |
-| `npm run xuat-html` | Xuất app thành thư mục HTML tĩnh `out/` (xem bên dưới) |
+| Lệnh                | Tác dụng                                                                                                                                                                 |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `npm run dev`       | Chạy bản phát triển                                                                                                                                                      |
+| `npm test`          | Chạy toàn bộ unit test (Vitest) cho engine, AI, lưu trữ                                                                                                                  |
+| `npm run test:e2e`  | Chạy test trình duyệt (Playwright) — cần `npm run build` trước. Máy mới cài trình duyệt một lần: `npx playwright install chromium`                                       |
+| `npm run build`     | Build bản chính thức (Vercel cũng chạy lệnh này)                                                                                                                         |
+| `npm run lint`      | Kiểm tra lỗi viết code                                                                                                                                                   |
+| `npm run nhap-mon`  | Nhập số liệu món từ `data/mon-an.csv` vào database, có kiểm tra lỗi (xem [`docs/HUONG-DAN-NHAP-SO-LIEU.md`](docs/HUONG-DAN-NHAP-SO-LIEU.md)) — cần Node.js 22.18 trở lên |
+| `npm run xuat-csv`  | Tạo lại `data/mon-an.csv` từ database hiện tại                                                                                                                           |
+| `npm run xuat-html` | Xuất app thành thư mục HTML tĩnh `out/` (xem bên dưới)                                                                                                                   |
 
 ### Bật tính năng AI (không bắt buộc)
 
@@ -82,7 +82,9 @@ lib/
   storage.ts          đọc/ghi localStorage
   profile.ts          hồ sơ người dùng, kiểm tra từng bước onboarding
   hoSoMau.ts          3 hồ sơ mẫu để demo
-data/dishes.json      database 21 món Việt mẫu (đọc bởi app)
+data/dishes.json      database 100 món Việt (đọc bởi app) — sinh ra từ 2 file dưới
+data/nguyen-lieu-100g.json  giá trị dinh dưỡng /100 g của từng nguyên liệu
+data/mon-cong-thuc.json     công thức món: nguyên liệu + số gam
 data/mon-an.csv       cùng dữ liệu dạng bảng — nhóm sửa bằng Excel rồi chạy npm run nhap-mon
 e2e/                  test trình duyệt (Playwright)
 docs/THUYET-TRINH.md  tài liệu chuẩn bị thuyết trình
@@ -130,11 +132,11 @@ Mỗi file có file `*.test.ts` đi kèm, gồm các ca tính tay ghi rõ phép 
 
 ## Tính năng AI (`lib/ai/`, `app/api/ai/`)
 
-| Tính năng | AI làm | Code kiểm tra | Dự phòng khi AI lỗi |
-|---|---|---|---|
-| Nhập món bằng chat | Hiểu câu → `{ meal, dish_id, portion }` | Món có trong DB, bữa/khẩu phần hợp lệ; người dùng xác nhận trước khi lưu | Dò từ khóa + so tên món không dấu |
-| Vì sao chọn món này? | Viết 2–3 câu | Không chứa con số nào ngoài số liệu engine đã tính | Câu ghép từ số liệu |
-| Chọn món đa dạng | Chọn id món từ danh sách đã lọc | Món trong danh sách, ≤2 lần/tuần, không trùng ngày, engine tự tính khẩu phần, ±10% | Giữ thực đơn rule-based |
+| Tính năng            | AI làm                                  | Code kiểm tra                                                                      | Dự phòng khi AI lỗi               |
+| -------------------- | --------------------------------------- | ---------------------------------------------------------------------------------- | --------------------------------- |
+| Nhập món bằng chat   | Hiểu câu → `{ meal, dish_id, portion }` | Món có trong DB, bữa/khẩu phần hợp lệ; người dùng xác nhận trước khi lưu           | Dò từ khóa + so tên món không dấu |
+| Vì sao chọn món này? | Viết 2–3 câu                            | Không chứa con số nào ngoài số liệu engine đã tính                                 | Câu ghép từ số liệu               |
+| Chọn món đa dạng     | Chọn id món từ danh sách đã lọc         | Món trong danh sách, ≤2 lần/tuần, không trùng ngày, engine tự tính khẩu phần, ±10% | Giữ thực đơn rule-based           |
 
 Chỉ gửi cho AI: mục tiêu, phong cách, calo bữa, tên món, nhãn ưu tiên — không gửi tuổi, cân nặng, chiều cao hay tên bệnh.
 
@@ -166,16 +168,23 @@ Mỗi địa chỉ mạng gọi AI tối đa 20 lần / 10 phút (`lib/ai/gioiHa
 - **BMI:** chặn số đo vô lý; phân loại theo chuẩn châu Á; gợi ý mục tiêu theo BMI; BMI ≥ 30 có ghi chú bác sĩ theo dõi; đạm tính theo cân nặng ứng với BMI 25 khi BMI > 25.
 - **Giảm cân tối đa 1% cân nặng/tuần và không quá 1 kg/tuần.**
 - **Ngân sách là trung bình mỗi bữa** (SPEC ghi "ngân sách mỗi bữa"); tối thiểu 10.000 đ.
-- **Số món tối đa 25** (SPEC ghi 10–15); đã thêm 6 món giá rẻ, số liệu ước lượng.
+- **Số món tối đa 120** (SPEC ghi 10–15); hiện có 100 món, số liệu ước lượng.
+- **Logo DUE** làm hình mờ nền và chân trang (ngoài SPEC, nhóm yêu cầu thêm để nộp đồ án).
 - Tầng 1 ẩn con số calo và tắt giảm bù (an toàn hơn SPEC).
 
 ## Giới hạn hiện tại
 
 - **Số liệu món là ước lượng** (`"verified": false`). Nhóm sẽ thay bằng số liệu theo Bảng thành phần thực phẩm Việt Nam — làm theo [`docs/HUONG-DAN-NHAP-SO-LIEU.md`](docs/HUONG-DAN-NHAP-SO-LIEU.md).
-- **Mới có 21 món mẫu** nên:
-  - Người cần nhiều calo (khoảng trên 2.200 kcal/ngày) có thể thấy vài ngày "chưa đủ món phù hợp".
-  - Người dị ứng nước mắm hoặc ăn chay với ngân sách thấp có ít lựa chọn.
-  - Hướng xử lý: bổ sung món (kể cả món phần lớn) khi có dữ liệu đã kiểm tra.
+- **100 món, nhưng ngân sách 10.000 đ/bữa vẫn khó.** Đo trên 3 hồ sơ mẫu (số ngày có thực đơn trên 7):
+
+  | Hồ sơ             | 10k | 12k | 15k | 20k trở lên |
+  | ----------------- | --- | --- | --- | ----------- |
+  | giảm mỡ           | 2   | 7   | 7   | 7           |
+  | bóng đá (tăng cơ) | 0   | 7   | 7   | 7           |
+  | tiểu đường        | 0   | 5   | 7   | 7           |
+
+  Từ 15.000 đ/bữa trở lên đã đủ cả tuần cho cả 3 hồ sơ. Ở mức 10.000 đ app nói thẳng là chưa tìm được món đủ chất, thay vì ép thực đơn sai mục tiêu.
+
 - Ngoài phạm vi MVP (định hướng phát triển): tài khoản, database máy chủ, chat tư vấn tự do, điều chỉnh calo theo cân nặng hằng tuần, nhận diện món qua ảnh, danh sách đi chợ… (xem `SPEC.md` mục 9).
 
 > Đây là gợi ý chung, không thay thế chỉ định của bác sĩ.

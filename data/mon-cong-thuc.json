@@ -1,0 +1,1411 @@
+{
+  "_ghi_chu": [
+    "Công thức món: mỗi món là danh sách [mã nguyên liệu, số gam] cho PHẦN VỪA.",
+    "Số calo/đạm/tinh bột/béo KHÔNG ghi tay ở đây — script cộng từ bảng data/nguyen-lieu-100g.json.",
+    "Mã dị ứng cũng tự suy ra từ nguyên liệu (thà báo dư còn hơn bỏ sót).",
+    "Chạy: npm run tinh-mon"
+  ],
+  "mon": [
+    {
+      "id": "banh-mi-thit",
+      "name": "Bánh mì thịt",
+      "meal": ["sang"],
+      "nguyen_lieu": [
+        ["banh-mi", 90],
+        ["thit-heo-nac", 50],
+        ["cha-lua", 20],
+        ["dua-leo", 20],
+        ["ca-rot", 15],
+        ["rau-thom", 10],
+        ["nuoc-tuong", 5]
+      ],
+      "price_vnd": 20000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "banh-mi-cha",
+      "name": "Bánh mì chả lụa",
+      "meal": ["sang", "phu"],
+      "nguyen_lieu": [
+        ["banh-mi", 80],
+        ["cha-lua", 40],
+        ["dua-leo", 20],
+        ["rau-thom", 10],
+        ["nuoc-tuong", 5]
+      ],
+      "price_vnd": 15000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": [],
+      "style_tags": ["tiet_kiem"]
+    },
+    {
+      "id": "banh-mi-xiu-mai",
+      "name": "Bánh mì xíu mại",
+      "meal": ["sang"],
+      "nguyen_lieu": [
+        ["banh-mi", 90],
+        ["thit-heo-nac", 60],
+        ["ca-chua", 40],
+        ["hanh-tay", 20],
+        ["dau-an", 5]
+      ],
+      "price_vnd": 20000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "xoi-man",
+      "name": "Xôi mặn",
+      "meal": ["sang"],
+      "nguyen_lieu": [
+        ["xoi-nep", 180],
+        ["lap-xuong", 25],
+        ["cha-lua", 25],
+        ["trung-cut", 20],
+        ["dau-an", 3]
+      ],
+      "price_vnd": 20000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": ["nhieu_muoi"],
+      "style_tags": []
+    },
+    {
+      "id": "xoi-bap",
+      "name": "Xôi bắp",
+      "meal": ["sang"],
+      "nguyen_lieu": [
+        ["xoi-nep", 120],
+        ["bap-ngot", 80],
+        ["dau-xanh", 20],
+        ["duong", 5],
+        ["me-rang", 5]
+      ],
+      "price_vnd": 10000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": ["tiet_kiem"]
+    },
+    {
+      "id": "chao-ga",
+      "name": "Cháo gà",
+      "meal": ["sang", "toi"],
+      "nguyen_lieu": [
+        ["chao-trang", 350],
+        ["thit-ga-khong-da", 60],
+        ["rau-thom", 15],
+        ["nuoc-mam", 5]
+      ],
+      "price_vnd": 25000,
+      "cook_minutes": 40,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "chao-thit-bam",
+      "name": "Cháo thịt bằm",
+      "meal": ["sang", "toi"],
+      "nguyen_lieu": [
+        ["chao-trang", 350],
+        ["thit-heo-nac", 50],
+        ["rau-thom", 10],
+        ["nuoc-mam", 5]
+      ],
+      "price_vnd": 12000,
+      "cook_minutes": 30,
+      "eat_out": false,
+      "diet": [],
+      "health_tags": [],
+      "style_tags": ["tiet_kiem"]
+    },
+    {
+      "id": "chao-ca",
+      "name": "Cháo cá",
+      "meal": ["sang", "toi"],
+      "nguyen_lieu": [
+        ["chao-trang", 350],
+        ["ca-loc", 70],
+        ["rau-thom", 15],
+        ["nuoc-mam", 5]
+      ],
+      "price_vnd": 25000,
+      "cook_minutes": 35,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "bun-rieu-cua",
+      "name": "Bún riêu cua",
+      "meal": ["sang", "trua"],
+      "nguyen_lieu": [
+        ["bun-tuoi", 200],
+        ["cua-dong", 60],
+        ["trung-ga", 30],
+        ["ca-chua", 60],
+        ["nuoc-dung-xuong", 250],
+        ["dau-an", 5],
+        ["nuoc-mam", 8],
+        ["rau-thom", 20]
+      ],
+      "price_vnd": 30000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_muoi", "nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "hu-tieu-nam-vang",
+      "name": "Hủ tiếu Nam Vang",
+      "meal": ["sang", "trua"],
+      "nguyen_lieu": [
+        ["hu-tieu-soi", 180],
+        ["thit-heo-nac", 50],
+        ["tom", 40],
+        ["trung-cut", 20],
+        ["nuoc-dung-xuong", 250],
+        ["gia-do", 30],
+        ["rau-thom", 15],
+        ["nuoc-mam", 5]
+      ],
+      "price_vnd": 35000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": ["nhieu_muoi", "nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "mi-quang",
+      "name": "Mì Quảng",
+      "meal": ["sang", "trua"],
+      "nguyen_lieu": [
+        ["banh-pho", 180],
+        ["tom", 40],
+        ["thit-heo-nac", 50],
+        ["trung-cut", 20],
+        ["nuoc-dung-xuong", 120],
+        ["dau-phong", 15],
+        ["rau-thom", 25],
+        ["dau-an", 5],
+        ["nuoc-mam", 8]
+      ],
+      "price_vnd": 30000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": ["nhieu_muoi", "nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "banh-canh-cua",
+      "name": "Bánh canh cua",
+      "meal": ["sang", "trua"],
+      "nguyen_lieu": [
+        ["banh-canh-soi", 200],
+        ["cua-dong", 60],
+        ["cha-ca", 40],
+        ["nuoc-dung-xuong", 250],
+        ["rau-thom", 15],
+        ["nuoc-mam", 5]
+      ],
+      "price_vnd": 30000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_muoi", "nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "pho-ga",
+      "name": "Phở gà",
+      "meal": ["sang", "trua"],
+      "nguyen_lieu": [
+        ["banh-pho", 200],
+        ["thit-ga-khong-da", 70],
+        ["nuoc-dung-xuong", 300],
+        ["gia-do", 30],
+        ["rau-thom", 20],
+        ["nuoc-mam", 5]
+      ],
+      "price_vnd": 35000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_muoi", "nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "bun-moc",
+      "name": "Bún mọc",
+      "meal": ["sang", "trua"],
+      "nguyen_lieu": [
+        ["bun-tuoi", 200],
+        ["thit-heo-nac", 60],
+        ["cha-lua", 30],
+        ["nam-rom", 30],
+        ["nuoc-dung-xuong", 250],
+        ["rau-thom", 15],
+        ["nuoc-mam", 5]
+      ],
+      "price_vnd": 30000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": ["nhieu_muoi", "nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "banh-beo",
+      "name": "Bánh bèo",
+      "meal": ["sang", "phu"],
+      "nguyen_lieu": [
+        ["bot-gao", 60],
+        ["tom", 25],
+        ["dau-an", 5],
+        ["nuoc-mam", 10],
+        ["rau-thom", 5]
+      ],
+      "price_vnd": 20000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_muoi", "nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "banh-xeo",
+      "name": "Bánh xèo",
+      "meal": ["sang", "trua", "toi"],
+      "nguyen_lieu": [
+        ["bot-gao", 70],
+        ["tom", 40],
+        ["thit-heo-nac", 40],
+        ["gia-do", 60],
+        ["nuoc-cot-dua", 30],
+        ["dau-an", 12],
+        ["rau-thom", 40],
+        ["nuoc-mam", 10]
+      ],
+      "price_vnd": 25000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": ["nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "bun-cha",
+      "name": "Bún chả",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["bun-tuoi", 180],
+        ["thit-heo-ba-chi", 80],
+        ["nuoc-mam", 15],
+        ["duong", 8],
+        ["rau-thom", 40],
+        ["dua-leo", 30]
+      ],
+      "price_vnd": 35000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": ["nhieu_muoi"],
+      "style_tags": []
+    },
+    {
+      "id": "bun-ca",
+      "name": "Bún cá",
+      "meal": ["sang", "trua"],
+      "nguyen_lieu": [
+        ["bun-tuoi", 200],
+        ["ca-thu", 70],
+        ["ca-chua", 50],
+        ["nuoc-dung-xuong", 250],
+        ["rau-thom", 20],
+        ["nuoc-mam", 5],
+        ["dau-an", 4]
+      ],
+      "price_vnd": 30000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_muoi", "nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "bun-dau-mam-tom",
+      "name": "Bún đậu mắm tôm",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["bun-tuoi", 180],
+        ["dau-hu-chien", 100],
+        ["thit-heo-ba-chi", 50],
+        ["mam-tom", 15],
+        ["rau-thom", 40]
+      ],
+      "price_vnd": 30000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": ["nhieu_muoi"],
+      "style_tags": []
+    },
+    {
+      "id": "banh-bao",
+      "name": "Bánh bao",
+      "meal": ["sang", "phu"],
+      "nguyen_lieu": [
+        ["bot-mi", 80],
+        ["thit-heo-nac", 40],
+        ["trung-cut", 20],
+        ["hanh-tay", 15],
+        ["dau-an", 3]
+      ],
+      "price_vnd": 12000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": [],
+      "style_tags": ["tiet_kiem"]
+    },
+    {
+      "id": "com-ga-xao-sa-ot",
+      "name": "Cơm gà xào sả ớt",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["thit-ga-co-da", 90],
+        ["hanh-tay", 30],
+        ["dau-an", 10],
+        ["nuoc-mam", 8],
+        ["rau-thom", 10]
+      ],
+      "price_vnd": 30000,
+      "cook_minutes": 25,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-suon-xao-chua-ngot",
+      "name": "Cơm sườn xào chua ngọt",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["suon-heo", 100],
+        ["ca-chua", 50],
+        ["hanh-tay", 30],
+        ["duong", 10],
+        ["dau-an", 10],
+        ["nuoc-mam", 8]
+      ],
+      "price_vnd": 32000,
+      "cook_minutes": 30,
+      "eat_out": false,
+      "diet": [],
+      "health_tags": ["nhieu_duong"],
+      "style_tags": []
+    },
+    {
+      "id": "com-bo-xao-rau-cu",
+      "name": "Cơm bò xào rau củ",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["thit-bo-nac", 90],
+        ["ca-rot", 40],
+        ["dau-que", 50],
+        ["hanh-tay", 30],
+        ["dau-an", 10],
+        ["nuoc-tuong", 8]
+      ],
+      "price_vnd": 35000,
+      "cook_minutes": 25,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-ca-chien",
+      "name": "Cơm cá chiên, rau luộc",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["ca-nuc", 100],
+        ["dau-an", 12],
+        ["nuoc-mam", 8],
+        ["rau-cai-xanh", 80]
+      ],
+      "price_vnd": 25000,
+      "cook_minutes": 25,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "com-tom-rim",
+      "name": "Cơm tôm rim",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["tom", 90],
+        ["duong", 8],
+        ["nuoc-mam", 10],
+        ["dau-an", 8],
+        ["rau-muong", 80]
+      ],
+      "price_vnd": 32000,
+      "cook_minutes": 25,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "com-muc-xao",
+      "name": "Cơm mực xào cà chua",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["muc", 100],
+        ["hanh-tay", 40],
+        ["ca-chua", 40],
+        ["dau-an", 10],
+        ["nuoc-mam", 8]
+      ],
+      "price_vnd": 35000,
+      "cook_minutes": 25,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "com-ga-kho-gung",
+      "name": "Cơm gà kho gừng",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["thit-ga-khong-da", 100],
+        ["duong", 8],
+        ["nuoc-mam", 12],
+        ["dau-an", 8],
+        ["rau-cai-xanh", 80]
+      ],
+      "price_vnd": 28000,
+      "cook_minutes": 30,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_muoi"],
+      "style_tags": []
+    },
+    {
+      "id": "com-thit-luoc",
+      "name": "Cơm thịt luộc, rau muống",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["thit-heo-ba-chi", 80],
+        ["nuoc-mam", 10],
+        ["rau-muong", 100],
+        ["dua-leo", 40]
+      ],
+      "price_vnd": 22000,
+      "cook_minutes": 30,
+      "eat_out": false,
+      "diet": [],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-ca-basa-kho",
+      "name": "Cơm cá basa kho",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["ca-basa", 110],
+        ["duong", 8],
+        ["nuoc-mam", 12],
+        ["dau-an", 6],
+        ["rau-cai-xanh", 80]
+      ],
+      "price_vnd": 24000,
+      "cook_minutes": 35,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_muoi", "nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "com-canh-bi-do-thit",
+      "name": "Cơm canh bí đỏ thịt bằm",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["bi-do", 150],
+        ["thit-heo-nac", 60],
+        ["dau-an", 6],
+        ["nuoc-mam", 8]
+      ],
+      "price_vnd": 18000,
+      "cook_minutes": 30,
+      "eat_out": false,
+      "diet": [],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-rau-muong-xao-trung",
+      "name": "Cơm rau muống xào, trứng ốp la",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["rau-muong", 150],
+        ["trung-ga", 60],
+        ["dau-an", 10],
+        ["nuoc-mam", 6]
+      ],
+      "price_vnd": 15000,
+      "cook_minutes": 20,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-dau-que-xao-thit",
+      "name": "Cơm đậu que xào thịt",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["dau-que", 120],
+        ["thit-heo-nac", 60],
+        ["dau-an", 8],
+        ["nuoc-mam", 6]
+      ],
+      "price_vnd": 17000,
+      "cook_minutes": 25,
+      "eat_out": false,
+      "diet": [],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-bi-xanh-nhoi-thit",
+      "name": "Cơm canh bí xanh nhồi thịt",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["bi-xanh", 150],
+        ["thit-heo-nac", 70],
+        ["nuoc-mam", 8]
+      ],
+      "price_vnd": 20000,
+      "cook_minutes": 35,
+      "eat_out": false,
+      "diet": [],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-ga-nuong",
+      "name": "Cơm gà nướng",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["thit-ga-co-da", 120],
+        ["dau-an", 6],
+        ["nuoc-tuong", 10],
+        ["dua-leo", 50]
+      ],
+      "price_vnd": 35000,
+      "cook_minutes": 35,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-chien-duong-chau",
+      "name": "Cơm chiên Dương Châu",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 280],
+        ["lap-xuong", 30],
+        ["trung-ga", 60],
+        ["tom", 40],
+        ["ca-rot", 40],
+        ["bap-ngot", 40],
+        ["dau-an", 12]
+      ],
+      "price_vnd": 30000,
+      "cook_minutes": 20,
+      "eat_out": false,
+      "diet": [],
+      "health_tags": ["nhieu_muoi", "nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "com-chien-trung",
+      "name": "Cơm chiên trứng",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 280],
+        ["trung-ga", 70],
+        ["rau-thom", 15],
+        ["dau-an", 10],
+        ["nuoc-tuong", 6]
+      ],
+      "price_vnd": 15000,
+      "cook_minutes": 15,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-ca-nuc-kho",
+      "name": "Cơm cá nục kho",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["ca-nuc", 110],
+        ["duong", 6],
+        ["nuoc-mam", 12],
+        ["dau-an", 5],
+        ["bap-cai", 80]
+      ],
+      "price_vnd": 22000,
+      "cook_minutes": 35,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_muoi", "nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "com-thit-bam-xao-dau-que",
+      "name": "Cơm thịt bằm xào đậu que",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["thit-heo-nac", 70],
+        ["dau-que", 100],
+        ["dau-an", 8],
+        ["nuoc-mam", 6]
+      ],
+      "price_vnd": 18000,
+      "cook_minutes": 20,
+      "eat_out": false,
+      "diet": [],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-ba-chi-kho-tieu",
+      "name": "Cơm ba chỉ kho tiêu",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 280],
+        ["thit-heo-ba-chi", 110],
+        ["duong", 10],
+        ["nuoc-mam", 12],
+        ["rau-cai-xanh", 80]
+      ],
+      "price_vnd": 25000,
+      "cook_minutes": 40,
+      "eat_out": false,
+      "diet": [],
+      "health_tags": ["nhieu_muoi", "nhieu_duong"],
+      "style_tags": []
+    },
+    {
+      "id": "com-bo-luc-lac",
+      "name": "Cơm bò lúc lắc",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 280],
+        ["thit-bo-nac", 130],
+        ["hanh-tay", 40],
+        ["ca-chua", 40],
+        ["dau-an", 15],
+        ["nuoc-tuong", 10],
+        ["dua-leo", 40]
+      ],
+      "price_vnd": 40000,
+      "cook_minutes": 25,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-chay-dau-hu-kho-tieu",
+      "name": "Cơm chay đậu hũ kho tiêu",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["dau-hu", 150],
+        ["nuoc-tuong", 12],
+        ["duong", 5],
+        ["dau-an", 8]
+      ],
+      "price_vnd": 15000,
+      "cook_minutes": 25,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-chay-cai-xao-nam",
+      "name": "Cơm chay cải xào nấm",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["rau-cai-xanh", 120],
+        ["nam-rom", 80],
+        ["dau-an", 10],
+        ["nuoc-tuong", 8]
+      ],
+      "price_vnd": 16000,
+      "cook_minutes": 15,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-chay-dau-que-xao-toi",
+      "name": "Cơm chay đậu que xào tỏi",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["dau-que", 150],
+        ["dau-an", 10],
+        ["nuoc-tuong", 8],
+        ["dau-phong", 10]
+      ],
+      "price_vnd": 15000,
+      "cook_minutes": 20,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-gao-lut-bi-do",
+      "name": "Cơm gạo lứt bí đỏ hầm",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-gao-lut", 250],
+        ["bi-do", 150],
+        ["dau-xanh", 30],
+        ["dau-an", 6]
+      ],
+      "price_vnd": 18000,
+      "cook_minutes": 40,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": ["gi_thap"],
+      "style_tags": []
+    },
+    {
+      "id": "bun-chay",
+      "name": "Bún chay nấm",
+      "meal": ["sang", "trua", "toi"],
+      "nguyen_lieu": [
+        ["bun-tuoi", 200],
+        ["dau-hu", 100],
+        ["nam-rom", 60],
+        ["nuoc-dung-rau", 250],
+        ["rau-thom", 25],
+        ["nuoc-tuong", 8]
+      ],
+      "price_vnd": 20000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "pho-chay",
+      "name": "Phở chay",
+      "meal": ["sang", "trua"],
+      "nguyen_lieu": [
+        ["banh-pho", 200],
+        ["dau-hu", 100],
+        ["nuoc-dung-rau", 300],
+        ["gia-do", 40],
+        ["rau-thom", 20],
+        ["nuoc-tuong", 8]
+      ],
+      "price_vnd": 25000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "mien-xao-chay",
+      "name": "Miến xào chay",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["mien-dong", 200],
+        ["dau-hu-chien", 80],
+        ["ca-rot", 40],
+        ["bap-cai", 60],
+        ["dau-an", 10],
+        ["nuoc-tuong", 8]
+      ],
+      "price_vnd": 18000,
+      "cook_minutes": 20,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "chao-dau-xanh",
+      "name": "Cháo đậu xanh",
+      "meal": ["sang", "toi"],
+      "nguyen_lieu": [
+        ["chao-trang", 350],
+        ["dau-xanh", 40],
+        ["duong", 5]
+      ],
+      "price_vnd": 10000,
+      "cook_minutes": 35,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "xoi-dau-den",
+      "name": "Xôi đậu đen",
+      "meal": ["sang"],
+      "nguyen_lieu": [
+        ["xoi-nep", 180],
+        ["dau-den", 35],
+        ["me-rang", 5],
+        ["duong", 5]
+      ],
+      "price_vnd": 12000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "banh-mi-chay",
+      "name": "Bánh mì chay",
+      "meal": ["sang", "phu"],
+      "nguyen_lieu": [
+        ["banh-mi", 90],
+        ["dau-hu-chien", 70],
+        ["dua-leo", 25],
+        ["ca-rot", 20],
+        ["rau-thom", 10],
+        ["nuoc-tuong", 6]
+      ],
+      "price_vnd": 15000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-chien-chay",
+      "name": "Cơm chiên chay",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 280],
+        ["dau-hu", 80],
+        ["ca-rot", 40],
+        ["bap-ngot", 40],
+        ["dau-an", 10],
+        ["nuoc-tuong", 8]
+      ],
+      "price_vnd": 18000,
+      "cook_minutes": 20,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "goi-cuon-chay",
+      "name": "Gỏi cuốn chay",
+      "meal": ["trua", "toi", "phu"],
+      "nguyen_lieu": [
+        ["banh-trang", 40],
+        ["bun-tuoi", 80],
+        ["dau-hu-chien", 60],
+        ["rau-thom", 40],
+        ["dua-leo", 40],
+        ["dau-phong", 12]
+      ],
+      "price_vnd": 18000,
+      "cook_minutes": 20,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-nam-rom-kho",
+      "name": "Cơm nấm rơm kho",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["nam-rom", 150],
+        ["dau-hu", 60],
+        ["nuoc-tuong", 10],
+        ["dau-an", 8],
+        ["duong", 5]
+      ],
+      "price_vnd": 17000,
+      "cook_minutes": 25,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-canh-chua-chay",
+      "name": "Cơm canh chua chay",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 250],
+        ["dau-hu", 100],
+        ["ca-chua", 60],
+        ["mang", 60],
+        ["nuoc-dung-rau", 200],
+        ["duong", 5],
+        ["dau-an", 6]
+      ],
+      "price_vnd": 18000,
+      "cook_minutes": 30,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "sua-dau-nanh-ly",
+      "name": "Sữa đậu nành",
+      "meal": ["sang", "phu"],
+      "nguyen_lieu": [["sua-dau-nanh", 250]],
+      "price_vnd": 8000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "sua-tuoi-hop",
+      "name": "Sữa tươi hộp",
+      "meal": ["sang", "phu"],
+      "nguyen_lieu": [["sua-tuoi", 220]],
+      "price_vnd": 10000,
+      "cook_minutes": 0,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "trung-luoc",
+      "name": "Trứng luộc",
+      "meal": ["sang", "phu"],
+      "nguyen_lieu": [["trung-ga", 110]],
+      "price_vnd": 8000,
+      "cook_minutes": 12,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "bap-luoc",
+      "name": "Bắp luộc",
+      "meal": ["phu"],
+      "nguyen_lieu": [["bap-ngot", 200]],
+      "price_vnd": 10000,
+      "cook_minutes": 25,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "khoai-mon-luoc",
+      "name": "Khoai môn luộc",
+      "meal": ["sang", "phu"],
+      "nguyen_lieu": [["khoai-mon", 180]],
+      "price_vnd": 10000,
+      "cook_minutes": 30,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "che-dau-den",
+      "name": "Chè đậu đen",
+      "meal": ["phu"],
+      "nguyen_lieu": [
+        ["dau-den", 40],
+        ["duong", 20],
+        ["nuoc-cot-dua", 30]
+      ],
+      "price_vnd": 12000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": ["nhieu_duong"],
+      "style_tags": []
+    },
+    {
+      "id": "che-dau-xanh",
+      "name": "Chè đậu xanh",
+      "meal": ["phu"],
+      "nguyen_lieu": [
+        ["dau-xanh", 40],
+        ["duong", 20],
+        ["nuoc-cot-dua", 25]
+      ],
+      "price_vnd": 12000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": ["nhieu_duong"],
+      "style_tags": []
+    },
+    {
+      "id": "du-du",
+      "name": "Đu đủ",
+      "meal": ["phu"],
+      "nguyen_lieu": [["du-du", 250]],
+      "price_vnd": 8000,
+      "cook_minutes": 0,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": ["gi_thap"],
+      "style_tags": []
+    },
+    {
+      "id": "oi",
+      "name": "Ổi",
+      "meal": ["phu"],
+      "nguyen_lieu": [["oi", 200]],
+      "price_vnd": 8000,
+      "cook_minutes": 0,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": ["gi_thap"],
+      "style_tags": []
+    },
+    {
+      "id": "thanh-long",
+      "name": "Thanh long",
+      "meal": ["phu"],
+      "nguyen_lieu": [["thanh-long", 250]],
+      "price_vnd": 10000,
+      "cook_minutes": 0,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": ["gi_thap"],
+      "style_tags": []
+    },
+    {
+      "id": "dua-hau",
+      "name": "Dưa hấu",
+      "meal": ["phu"],
+      "nguyen_lieu": [["dua-hau", 300]],
+      "price_vnd": 8000,
+      "cook_minutes": 0,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "cam",
+      "name": "Cam",
+      "meal": ["phu"],
+      "nguyen_lieu": [["cam", 250]],
+      "price_vnd": 10000,
+      "cook_minutes": 0,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": ["gi_thap"],
+      "style_tags": []
+    },
+    {
+      "id": "sua-chua-trai-cay",
+      "name": "Sữa chua trái cây",
+      "meal": ["phu"],
+      "nguyen_lieu": [
+        ["sua-chua", 150],
+        ["du-du", 80],
+        ["chuoi", 60]
+      ],
+      "price_vnd": 15000,
+      "cook_minutes": 10,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "dau-phong-rang",
+      "name": "Đậu phộng rang",
+      "meal": ["phu"],
+      "nguyen_lieu": [["dau-phong", 40]],
+      "price_vnd": 8000,
+      "cook_minutes": 10,
+      "eat_out": false,
+      "diet": ["chay", "khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-tam-suon-trung-cha",
+      "name": "Cơm tấm sườn trứng chả",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 280],
+        ["suon-heo", 110],
+        ["trung-ga", 60],
+        ["cha-lua", 40],
+        ["dua-leo", 40],
+        ["nuoc-mam", 15],
+        ["dau-an", 6]
+      ],
+      "price_vnd": 45000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": ["nhieu_muoi"],
+      "style_tags": []
+    },
+    {
+      "id": "com-ga-chien-nuoc-mam",
+      "name": "Cơm gà chiên nước mắm",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 280],
+        ["thit-ga-co-da", 130],
+        ["dau-an", 15],
+        ["nuoc-mam", 15],
+        ["duong", 10],
+        ["dua-leo", 40]
+      ],
+      "price_vnd": 38000,
+      "cook_minutes": 30,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_muoi", "nhieu_duong"],
+      "style_tags": []
+    },
+    {
+      "id": "mi-xao-bo",
+      "name": "Mì xào bò",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["mi-trung-kho", 120],
+        ["thit-bo-nac", 100],
+        ["bap-cai", 80],
+        ["ca-rot", 40],
+        ["dau-an", 14],
+        ["nuoc-tuong", 10]
+      ],
+      "price_vnd": 35000,
+      "cook_minutes": 20,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "banh-canh-gio-heo",
+      "name": "Bánh canh giò heo",
+      "meal": ["sang", "trua", "toi"],
+      "nguyen_lieu": [
+        ["banh-canh-soi", 250],
+        ["gio-heo", 140],
+        ["nuoc-dung-xuong", 250],
+        ["rau-thom", 20],
+        ["nuoc-mam", 8],
+        ["dau-an", 5]
+      ],
+      "price_vnd": 35000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": ["nhieu_muoi", "nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "hu-tieu-xao",
+      "name": "Hủ tiếu xào",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["hu-tieu-soi", 280],
+        ["thit-heo-nac", 90],
+        ["tom", 50],
+        ["trung-ga", 50],
+        ["gia-do", 60],
+        ["ca-rot", 40],
+        ["dau-an", 18],
+        ["nuoc-tuong", 10]
+      ],
+      "price_vnd": 32000,
+      "cook_minutes": 25,
+      "eat_out": false,
+      "diet": [],
+      "health_tags": ["nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "com-ca-thu-chien",
+      "name": "Cơm cá thu chiên",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 280],
+        ["ca-thu", 120],
+        ["dau-an", 14],
+        ["nuoc-mam", 10],
+        ["rau-cai-xanh", 80]
+      ],
+      "price_vnd": 35000,
+      "cook_minutes": 30,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_purine"],
+      "style_tags": []
+    },
+    {
+      "id": "pho-xao-bo",
+      "name": "Phở xào bò",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["banh-pho", 300],
+        ["thit-bo-nac", 100],
+        ["trung-ga", 40],
+        ["rau-cai-xanh", 100],
+        ["hanh-tay", 40],
+        ["dau-an", 18],
+        ["nuoc-tuong", 10]
+      ],
+      "price_vnd": 33000,
+      "cook_minutes": 20,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-suon-trung-op-la",
+      "name": "Cơm sườn trứng ốp la",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 280],
+        ["suon-heo", 100],
+        ["trung-ga", 60],
+        ["dau-an", 10],
+        ["nuoc-mam", 12],
+        ["dua-leo", 40]
+      ],
+      "price_vnd": 38000,
+      "cook_minutes": 30,
+      "eat_out": false,
+      "diet": [],
+      "health_tags": ["nhieu_muoi"],
+      "style_tags": []
+    },
+    {
+      "id": "xoi-ga",
+      "name": "Xôi gà",
+      "meal": ["sang"],
+      "nguyen_lieu": [
+        ["xoi-nep", 200],
+        ["thit-ga-khong-da", 90],
+        ["hanh-tay", 20],
+        ["dau-an", 6],
+        ["nuoc-mam", 8]
+      ],
+      "price_vnd": 25000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": ["khong_heo"],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "banh-mi-thit-nuong",
+      "name": "Bánh mì thịt nướng",
+      "meal": ["sang", "trua"],
+      "nguyen_lieu": [
+        ["banh-mi", 100],
+        ["thit-heo-nac", 70],
+        ["dua-leo", 25],
+        ["ca-rot", 20],
+        ["rau-thom", 10],
+        ["dau-an", 5],
+        ["nuoc-mam", 6]
+      ],
+      "price_vnd": 22000,
+      "cook_minutes": 0,
+      "eat_out": true,
+      "diet": [],
+      "health_tags": [],
+      "style_tags": []
+    },
+    {
+      "id": "com-vit-kho-gung",
+      "name": "Cơm vịt kho gừng",
+      "meal": ["trua", "toi"],
+      "nguyen_lieu": [
+        ["com-trang", 260],
+        ["thit-vit", 120],
+        ["duong", 8],
+        ["nuoc-mam", 12],
+        ["dau-an", 6],
+        ["rau-cai-xanh", 80]
+      ],
+      "price_vnd": 38000,
+      "cook_minutes": 40,
+      "eat_out": false,
+      "diet": ["khong_heo"],
+      "health_tags": ["nhieu_muoi"],
+      "style_tags": []
+    }
+  ]
+}
